@@ -1,0 +1,3840 @@
+{
+  "project": {
+    "id": "lightward",
+    "name": "光域守护（示例）",
+    "pitch": "在雾海群岛间修复失落的灯塔，让光重新连接彼此孤立的港湾。",
+    "genres": [
+      "叙事冒险",
+      "探索"
+    ],
+    "engine": "Unity",
+    "platforms": [
+      "PC",
+      "Steam Deck"
+    ],
+    "logoAsset": null,
+    "coverPreset": "lighthouse",
+    "coverAsset": null,
+    "enabledModules": [
+      "overview",
+      "tasks",
+      "roadmap",
+      "calendar",
+      "time",
+      "docs",
+      "lore",
+      "art",
+      "characters",
+      "locations",
+      "factions",
+      "vehicles",
+      "inventory",
+      "collectibles",
+      "quests",
+      "scenes",
+      "graph",
+      "mapmaker",
+      "testing",
+      "devlog"
+    ],
+    "currentPhaseId": "phase-2",
+    "createdAt": "@day:-24T09:00:00Z",
+    "updatedAt": "@day:0T09:00:00Z"
+  },
+  "entities": [
+    {
+      "id": "phase-1",
+      "projectId": "lightward",
+      "entityType": "phase",
+      "title": "原型探索",
+      "subtitle": "",
+      "summary": "验证光束与潮汐的核心循环。",
+      "status": "已完成",
+      "tags": [],
+      "body": "",
+      "data": {
+        "startDate": "@day:-25",
+        "endDate": "@day:-8",
+        "deliverables": [
+          {
+            "id": "phase-1-d0",
+            "text": "验证光束反射",
+            "done": true
+          },
+          {
+            "id": "phase-1-d1",
+            "text": "完成首轮原型评审",
+            "done": true
+          }
+        ]
+      },
+      "sortOrder": 1,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "phase-2",
+      "projectId": "lightward",
+      "entityType": "phase",
+      "title": "垂直切片",
+      "subtitle": "",
+      "summary": "完成第一座灯塔的完整冒险。",
+      "status": "进行中",
+      "tags": [],
+      "body": "",
+      "data": {
+        "startDate": "@day:-7",
+        "endDate": "@day:10",
+        "deliverables": [
+          {
+            "id": "phase-2-d0",
+            "text": "串联白岬步道",
+            "done": true
+          },
+          {
+            "id": "phase-2-d1",
+            "text": "完成切片试玩",
+            "done": false
+          }
+        ]
+      },
+      "sortOrder": 2,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "phase-3",
+      "projectId": "lightward",
+      "entityType": "phase",
+      "title": "群岛扩建",
+      "subtitle": "",
+      "summary": "连接四个港湾与海底航道。",
+      "status": "待开始",
+      "tags": [],
+      "body": "",
+      "data": {
+        "startDate": "@day:11",
+        "endDate": "@day:28",
+        "deliverables": [
+          {
+            "id": "phase-3-d0",
+            "text": "连通群岛航线",
+            "done": false
+          },
+          {
+            "id": "phase-3-d1",
+            "text": "检查港口指引",
+            "done": false
+          }
+        ]
+      },
+      "sortOrder": 3,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "phase-4",
+      "projectId": "lightward",
+      "entityType": "phase",
+      "title": "航线封测",
+      "subtitle": "",
+      "summary": "邀请首批领航员盲测。",
+      "status": "待开始",
+      "tags": [],
+      "body": "",
+      "data": {
+        "startDate": "@day:29",
+        "endDate": "@day:46",
+        "deliverables": [
+          {
+            "id": "phase-4-d0",
+            "text": "收集封测反馈",
+            "done": false
+          },
+          {
+            "id": "phase-4-d1",
+            "text": "确认发版清单",
+            "done": false
+          }
+        ]
+      },
+      "sortOrder": 4,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "milestone-1",
+      "projectId": "lightward",
+      "entityType": "milestone",
+      "title": "雾海原型评审",
+      "subtitle": "",
+      "summary": "交付可航行的灰盒原型。",
+      "status": "已完成",
+      "tags": [],
+      "body": "",
+      "data": {
+        "dueDate": "@day:-8",
+        "phaseId": "phase-1"
+      },
+      "sortOrder": 1,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "milestone-2",
+      "projectId": "lightward",
+      "entityType": "milestone",
+      "title": "灯塔切片试玩",
+      "subtitle": "",
+      "summary": "开放从雾港到白岬的首章。",
+      "status": "待开始",
+      "tags": [],
+      "body": "",
+      "data": {
+        "dueDate": "@day:12",
+        "phaseId": "phase-2"
+      },
+      "sortOrder": 2,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "milestone-3",
+      "projectId": "lightward",
+      "entityType": "milestone",
+      "title": "群岛航线开放",
+      "subtitle": "",
+      "summary": "完成三条支线与潮汐演算。",
+      "status": "待开始",
+      "tags": [],
+      "body": "",
+      "data": {
+        "dueDate": "@day:35",
+        "phaseId": "phase-3"
+      },
+      "sortOrder": 3,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "task-1",
+      "projectId": "lightward",
+      "entityType": "task",
+      "title": "校准灯塔光束",
+      "subtitle": "",
+      "summary": "验证三面镜子交汇的容差。",
+      "status": "已完成",
+      "tags": [
+        "玩法"
+      ],
+      "body": "",
+      "data": {
+        "phaseId": "phase-2",
+        "priority": "高",
+        "dueDate": "@day:-3",
+        "milestoneId": "milestone-1",
+        "estimateHours": 1,
+        "completedAt": "@day:-5T14:00:00Z",
+        "subtasks": [
+          {
+            "id": "task-1-s0",
+            "title": "校准反射镜",
+            "done": true
+          },
+          {
+            "id": "task-1-s1",
+            "title": "验证光束交汇",
+            "done": true
+          }
+        ]
+      },
+      "sortOrder": 1,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "task-2",
+      "projectId": "lightward",
+      "entityType": "task",
+      "title": "绘制雾港剪影",
+      "subtitle": "",
+      "summary": "确定雾层中的建筑轮廓。",
+      "status": "已完成",
+      "tags": [
+        "美术"
+      ],
+      "body": "",
+      "data": {
+        "phaseId": "phase-2",
+        "priority": "中",
+        "dueDate": "@day:-2",
+        "milestoneId": "milestone-1",
+        "estimateHours": 2,
+        "completedAt": "@day:-4T14:00:00Z"
+      },
+      "sortOrder": 2,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "task-3",
+      "projectId": "lightward",
+      "entityType": "task",
+      "title": "潮汐时钟交互",
+      "subtitle": "",
+      "summary": "给退潮窗口添加声光提示。",
+      "status": "进行中",
+      "tags": [
+        "交互"
+      ],
+      "body": "",
+      "data": {
+        "phaseId": "phase-2",
+        "priority": "中",
+        "dueDate": "@day:-1",
+        "milestoneId": "milestone-1",
+        "estimateHours": 3,
+        "subtasks": [
+          {
+            "id": "task-3-s0",
+            "title": "显示潮汐刻度",
+            "done": true
+          },
+          {
+            "id": "task-3-s1",
+            "title": "接入退潮交互",
+            "done": false
+          }
+        ]
+      },
+      "sortOrder": 3,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "task-4",
+      "projectId": "lightward",
+      "entityType": "task",
+      "title": "白岬步道灰盒",
+      "subtitle": "",
+      "summary": "测量攀登路线的镜头距离。",
+      "status": "已完成",
+      "tags": [
+        "关卡"
+      ],
+      "body": "",
+      "data": {
+        "phaseId": "phase-2",
+        "priority": "高",
+        "dueDate": "@day:0",
+        "milestoneId": "milestone-1",
+        "estimateHours": 4,
+        "completedAt": "@day:-3T14:00:00Z"
+      },
+      "sortOrder": 4,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "task-5",
+      "projectId": "lightward",
+      "entityType": "task",
+      "title": "编写守灯人对白",
+      "subtitle": "",
+      "summary": "写出归航与告别两个分支。",
+      "status": "进行中",
+      "tags": [
+        "玩法"
+      ],
+      "body": "",
+      "data": {
+        "phaseId": "phase-2",
+        "priority": "中",
+        "dueDate": "@day:1",
+        "milestoneId": "milestone-2",
+        "estimateHours": 1
+      },
+      "sortOrder": 5,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "task-6",
+      "projectId": "lightward",
+      "entityType": "task",
+      "title": "制作潮音采样",
+      "subtitle": "",
+      "summary": "录制水下与岸边的过渡。",
+      "status": "待测试",
+      "tags": [
+        "美术"
+      ],
+      "body": "",
+      "data": {
+        "phaseId": "phase-2",
+        "priority": "中",
+        "dueDate": "@day:2",
+        "milestoneId": "milestone-2",
+        "estimateHours": 2,
+        "subtasks": [
+          {
+            "id": "task-6-s0",
+            "title": "录制潮汐循环",
+            "done": true
+          },
+          {
+            "id": "task-6-s1",
+            "title": "检查循环接缝",
+            "done": false
+          }
+        ]
+      },
+      "sortOrder": 6,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "task-7",
+      "projectId": "lightward",
+      "entityType": "task",
+      "title": "旧船坞碰撞检查",
+      "subtitle": "",
+      "summary": "修正斜坡尽头的卡位。",
+      "status": "已完成",
+      "tags": [
+        "交互"
+      ],
+      "body": "",
+      "data": {
+        "phaseId": "phase-2",
+        "priority": "高",
+        "dueDate": "@day:3",
+        "milestoneId": "milestone-2",
+        "estimateHours": 3,
+        "completedAt": "@day:-2T14:00:00Z"
+      },
+      "sortOrder": 7,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "task-8",
+      "projectId": "lightward",
+      "entityType": "task",
+      "title": "接入折光镜配方",
+      "subtitle": "",
+      "summary": "让维修台消耗正确的棱晶。",
+      "status": "进行中",
+      "tags": [
+        "关卡"
+      ],
+      "body": "",
+      "data": {
+        "phaseId": "phase-2",
+        "priority": "中",
+        "dueDate": "@day:4",
+        "milestoneId": "milestone-2",
+        "estimateHours": 4
+      },
+      "sortOrder": 8,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "task-9",
+      "projectId": "lightward",
+      "entityType": "task",
+      "title": "标注海图图例",
+      "subtitle": "",
+      "summary": "为五处锚点补充名称。",
+      "status": "已完成",
+      "tags": [
+        "玩法"
+      ],
+      "body": "",
+      "data": {
+        "phaseId": "phase-2",
+        "priority": "中",
+        "dueDate": "@day:5",
+        "milestoneId": "milestone-3",
+        "estimateHours": 1,
+        "completedAt": "@day:-1T14:00:00Z"
+      },
+      "sortOrder": 9,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "task-10",
+      "projectId": "lightward",
+      "entityType": "task",
+      "title": "绘制夜航尾迹",
+      "subtitle": "",
+      "summary": "调整尾迹消散时长。",
+      "status": "待测试",
+      "tags": [
+        "美术"
+      ],
+      "body": "",
+      "data": {
+        "phaseId": "phase-2",
+        "priority": "高",
+        "dueDate": "@day:6",
+        "milestoneId": "milestone-3",
+        "estimateHours": 2
+      },
+      "sortOrder": 10,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "task-11",
+      "projectId": "lightward",
+      "entityType": "task",
+      "title": "验证双结局存档",
+      "subtitle": "",
+      "summary": "回读两条存档验证选择。",
+      "status": "待办",
+      "tags": [
+        "交互"
+      ],
+      "body": "",
+      "data": {
+        "phaseId": "phase-2",
+        "priority": "中",
+        "dueDate": "@day:7",
+        "milestoneId": "milestone-3",
+        "estimateHours": 3,
+        "subtasks": [
+          {
+            "id": "task-11-s0",
+            "title": "读取首个结局",
+            "done": false
+          },
+          {
+            "id": "task-11-s1",
+            "title": "读取第二个结局",
+            "done": false
+          }
+        ]
+      },
+      "sortOrder": 11,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "task-12",
+      "projectId": "lightward",
+      "entityType": "task",
+      "title": "整理试玩反馈",
+      "subtitle": "",
+      "summary": "汇总盲测记录并分类。",
+      "status": "待办",
+      "tags": [
+        "关卡"
+      ],
+      "body": "",
+      "data": {
+        "phaseId": "phase-2",
+        "priority": "中",
+        "dueDate": "@day:8",
+        "milestoneId": "milestone-3",
+        "estimateHours": 4
+      },
+      "sortOrder": 12,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "calendar_event-1",
+      "projectId": "lightward",
+      "entityType": "calendar_event",
+      "title": "雾港灰盒走查",
+      "subtitle": "",
+      "summary": "关卡组联合走查白岬步道。",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "date": "@day:0",
+        "startTime": "14:00",
+        "endTime": "15:30"
+      },
+      "sortOrder": 1,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "calendar_event-2",
+      "projectId": "lightward",
+      "entityType": "calendar_event",
+      "title": "潮音录制",
+      "subtitle": "",
+      "summary": "收录雨后礁石旁的水声。",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "date": "@day:3",
+        "startTime": "14:00",
+        "endTime": "15:30"
+      },
+      "sortOrder": 2,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "calendar_event-3",
+      "projectId": "lightward",
+      "entityType": "calendar_event",
+      "title": "叙事分支审阅",
+      "subtitle": "",
+      "summary": "核对场景对白与任务条件。",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "date": "@day:6",
+        "startTime": "14:00",
+        "endTime": "15:30"
+      },
+      "sortOrder": 3,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "calendar_event-4",
+      "projectId": "lightward",
+      "entityType": "calendar_event",
+      "title": "首章封闭试玩",
+      "subtitle": "",
+      "summary": "邀请六位新玩家测试首章。",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "date": "@day:9",
+        "startTime": "14:00",
+        "endTime": "15:30"
+      },
+      "sortOrder": 4,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "doc-1",
+      "projectId": "lightward",
+      "entityType": "doc",
+      "title": "航海设计手册",
+      "subtitle": "",
+      "summary": "项目设计文档索引。",
+      "status": "",
+      "tags": [],
+      "body": "# 航海设计手册\n沿主航线阅读子文档，试玩后在开发日志记录偏离预期的观察。\n\n## 首航验收\n- [ ] 在海图中找到[[白岬灯塔]]\n- [x] 核对雾中返航提示",
+      "data": {
+        "parentId": null,
+        "icon": "📘"
+      },
+      "sortOrder": 1,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "doc-2",
+      "projectId": "lightward",
+      "entityType": "doc",
+      "title": "光与雾的循环",
+      "subtitle": "",
+      "summary": "光束、燃料与海雾的相互作用。",
+      "status": "",
+      "tags": [],
+      "body": "当船离开光域，罗盘指针开始减速。第一声长笛后，玩家仍有一次看见海岸的机会。",
+      "data": {
+        "parentId": "doc-1",
+        "icon": "🕯️"
+      },
+      "sortOrder": 2,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "doc-3",
+      "projectId": "lightward",
+      "entityType": "doc",
+      "title": "白岬关卡导览",
+      "subtitle": "",
+      "summary": "从登岸到塔顶的四段体验。",
+      "status": "",
+      "tags": [],
+      "body": "退潮后打开石阶。第二段让玩家隔着残墙看见灯室，第三段用碎镜提示最终谜题。",
+      "data": {
+        "parentId": "doc-2",
+        "icon": "🧭"
+      },
+      "sortOrder": 3,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "doc-4",
+      "projectId": "lightward",
+      "entityType": "doc",
+      "title": "叙事写作约定",
+      "subtitle": "",
+      "summary": "用潮声和观察推动对话。",
+      "status": "",
+      "tags": [],
+      "body": "每段对白先写角色看见了什么，再写他们决定隐瞒什么。",
+      "data": {
+        "parentId": "doc-1",
+        "icon": "✍️"
+      },
+      "sortOrder": 4,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "doc-5",
+      "projectId": "lightward",
+      "entityType": "doc",
+      "title": "对白录制清单",
+      "subtitle": "",
+      "summary": "列出守灯人录音的呼吸间隔。",
+      "status": "",
+      "tags": [],
+      "body": "收录近距离低语、隔风呼喊与灯室混响三轨。\n\n- [ ] 校对守灯人的发音\n- [ ] 检查潮声与台词的间隔",
+      "data": {
+        "parentId": "doc-4",
+        "icon": "🎙️"
+      },
+      "sortOrder": 5,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "lore-1",
+      "projectId": "lightward",
+      "entityType": "lore",
+      "title": "雾海纪年",
+      "subtitle": "",
+      "summary": "历代航行者用长雾出现的年份计时。",
+      "status": "",
+      "tags": [],
+      "body": "[[白岬灯塔]]熄灭的那一年，海历多出了一天。\n\n雾港旧钟比其余四岛慢了一整天。潮图公社将两套日期并排写入年鉴，每年请各港的领航员共同校正。",
+      "data": {
+        "secretTruth": "被抹去的一天保存于灯芯中。",
+        "revealStage": 0,
+        "category": "历史",
+        "era": "长雾纪",
+        "year": -100,
+        "secrecy": "公开常识",
+        "icon": "📜",
+        "meta": [
+          {
+            "id": "origin",
+            "label": "记载来源",
+            "value": "港务年鉴"
+          }
+        ],
+        "coverAsset": "2825749fe298e2f9e4539e1dd5835fb91d817af18b6b034bcf4bf20b7894284e.webp"
+      },
+      "sortOrder": 1,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "lore-2",
+      "projectId": "lightward",
+      "entityType": "lore",
+      "title": "白岬灯塔",
+      "subtitle": "",
+      "summary": "群岛最早的引航灯仍在旋转。",
+      "status": "",
+      "tags": [],
+      "body": "在[[回声潮汐]]抵达前，守塔人必须把镜片朝北。",
+      "data": {
+        "secretTruth": "灯塔的光消耗的是守灯人的记忆。",
+        "revealStage": 1,
+        "category": "地理",
+        "era": "初灯纪",
+        "year": -26,
+        "secrecy": "公开常识",
+        "icon": "🗼",
+        "meta": [
+          {
+            "id": "origin",
+            "label": "记载来源",
+            "value": "守塔日志"
+          }
+        ],
+        "coverAsset": "27f52385000af7ce578b42db2a4c683134d2f6a1a720091facd444bccb7a2d4d.webp"
+      },
+      "sortOrder": 2,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "lore-3",
+      "projectId": "lightward",
+      "entityType": "lore",
+      "title": "回声潮汐",
+      "subtitle": "",
+      "summary": "潮水偶尔会带回昨日的声音。",
+      "status": "",
+      "tags": [],
+      "body": "据说[[失名航道]]尽头藏着第一声潮汐。",
+      "data": {
+        "secretTruth": "回声来自下一次而非上一次潮汐。",
+        "revealStage": 2,
+        "category": "世界规则",
+        "era": "初灯纪",
+        "year": -18,
+        "secrecy": "禁忌秘密",
+        "icon": "🌊",
+        "meta": [
+          {
+            "id": "origin",
+            "label": "记载来源",
+            "value": "测深记录"
+          }
+        ],
+        "revealQuestId": "quest-4",
+        "coverAsset": "2825749fe298e2f9e4539e1dd5835fb91d817af18b6b034bcf4bf20b7894284e.webp"
+      },
+      "sortOrder": 3,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "lore-4",
+      "projectId": "lightward",
+      "entityType": "lore",
+      "title": "失名航道",
+      "subtitle": "",
+      "summary": "一条只在退潮时出现的航道。",
+      "status": "",
+      "tags": [],
+      "body": "将[[折光棱晶]]靠近海图，暗线才会浮起。",
+      "data": {
+        "secretTruth": "航道通往沉在海底的旧港。",
+        "revealStage": 3,
+        "category": "地理",
+        "era": "沉港纪",
+        "year": 0,
+        "secrecy": "鲜为人知",
+        "icon": "🗺️",
+        "meta": [
+          {
+            "id": "origin",
+            "label": "记载来源",
+            "value": "残损海图"
+          }
+        ],
+        "coverAsset": "c2d15d4b9b2c640e039a4afecd34904fc20422fe534cc497718a72084539dbb5.webp"
+      },
+      "sortOrder": 4,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "lore-5",
+      "projectId": "lightward",
+      "entityType": "lore",
+      "title": "守灯誓约",
+      "subtitle": "",
+      "summary": "守灯人交班时留下私人的誓词。",
+      "status": "",
+      "tags": [],
+      "body": "[[雾海纪年]]的最后一页记着第一位守灯人的全名。",
+      "data": {
+        "secretTruth": "每个名字对应一段航道。",
+        "revealStage": 0,
+        "category": "文化风俗",
+        "era": "沉港纪",
+        "year": 6,
+        "secrecy": "鲜为人知",
+        "icon": "🕯️",
+        "meta": [
+          {
+            "id": "origin",
+            "label": "记载来源",
+            "value": "交班手册"
+          }
+        ],
+        "revealQuestId": "quest-1",
+        "coverAsset": "5e9feb78b17fcb0faff613106b4957098b6678d9f5b60c064091c39c0627096c.webp"
+      },
+      "sortOrder": 5,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "lore-6",
+      "projectId": "lightward",
+      "entityType": "lore",
+      "title": "折光棱晶",
+      "subtitle": "",
+      "summary": "潮下岩层中会聚光的天然晶体。",
+      "status": "",
+      "tags": [],
+      "body": "[[白岬灯塔]]的核心是一枚会记录声音的棱晶。",
+      "data": {
+        "secretTruth": "晶体从沉没的信标上剥落。",
+        "revealStage": 1,
+        "category": "魔法与科技",
+        "era": "回航纪",
+        "year": 28,
+        "secrecy": "未设定",
+        "icon": "💎",
+        "meta": [
+          {
+            "id": "origin",
+            "label": "记载来源",
+            "value": "船坞档案"
+          }
+        ],
+        "coverAsset": "3c4985e1fd048cc675114ea181b8ce35783258593d44f3047bde07d5c0ed4b43.webp"
+      },
+      "sortOrder": 6,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "character-1",
+      "projectId": "lightward",
+      "entityType": "character",
+      "title": "陆汐",
+      "subtitle": "",
+      "summary": "见习领航员，随身携带父亲的旧罗盘。",
+      "status": "",
+      "tags": [],
+      "body": "见习领航员，随身携带父亲的旧罗盘。 首次独自穿雾之后，将那天的潮位记在了航海日志里。",
+      "data": {
+        "homeId": "location-1",
+        "timeline": [
+          {
+            "year": 12,
+            "event": "首次独自穿雾",
+            "id": "life-0",
+            "when": "旧航季"
+          },
+          {
+            "year": 28,
+            "event": "回到雾港",
+            "id": "life-1",
+            "when": "白岬重启"
+          }
+        ],
+        "role": "主角",
+        "age": "22",
+        "race": "雾港渔家",
+        "appearance": "短斗篷总搭在左肩，皮带上挂着旧罗盘。",
+        "personality": "先伸手帮忙，之后才问条件。",
+        "speech": "遇到犹豫就报出一个航向。",
+        "motivation": "找出父亲没有返港的原因。",
+        "arc": "从依赖旧罗盘到自己判断潮向。",
+        "avatarAsset": "75b4220f8959969f0a4315e5984b6959b272b492dec2e20f5aa471f9a7244a48.webp"
+      },
+      "sortOrder": 1,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "character-2",
+      "projectId": "lightward",
+      "entityType": "character",
+      "title": "沈烛",
+      "subtitle": "",
+      "summary": "白岬最后的守灯人，能分辨每一种雾笛。",
+      "status": "",
+      "tags": [],
+      "body": "白岬最后的守灯人，能分辨每一种雾笛。 接任守灯之后，将那天的潮位记在了航海日志里。",
+      "data": {
+        "homeId": "location-2",
+        "timeline": [
+          {
+            "year": 13,
+            "event": "接任守灯",
+            "id": "life-0",
+            "when": "旧航季"
+          },
+          {
+            "year": 28,
+            "event": "封闭塔门",
+            "id": "life-1",
+            "when": "白岬重启"
+          }
+        ],
+        "role": "导师",
+        "age": "63",
+        "race": "白岬灯户",
+        "appearance": "袖口缝着磨亮的黄铜环。",
+        "personality": "沉默而守信。",
+        "speech": "只用眼前看得见的事物打比方。",
+        "motivation": "留下最后一条安全航道。",
+        "arc": "允许下一代改变誓约。",
+        "avatarAsset": "52f21908eaa2ce8e6ddc53ca8d64c1a2404b56e5510f13d943e81cb44e6dff0d.webp"
+      },
+      "sortOrder": 2,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "character-3",
+      "projectId": "lightward",
+      "entityType": "character",
+      "title": "黎鸥",
+      "subtitle": "",
+      "summary": "测绘师，靠回声绘制潮下地形。",
+      "status": "",
+      "tags": [],
+      "body": "测绘师，靠回声绘制潮下地形。 测出潮沟之后，将那天的潮位记在了航海日志里。",
+      "data": {
+        "homeId": "location-3",
+        "timeline": [
+          {
+            "year": 14,
+            "event": "测出潮沟",
+            "id": "life-0",
+            "when": "旧航季"
+          },
+          {
+            "year": 28,
+            "event": "标记白岬",
+            "id": "life-1",
+            "when": "白岬重启"
+          }
+        ],
+        "role": "队友",
+        "age": "30",
+        "race": "外岛测绘所",
+        "appearance": "戴一副有裂纹的听潮耳罩。",
+        "personality": "对不确定的答案格外耐心。",
+        "speech": "报数后留一拍空白。",
+        "motivation": "绘成可自由抄录的群岛海图。",
+        "arc": "学会信任仪器以外的证词。",
+        "avatarAsset": "17612a7ce5f4945f9f586926a65b3093c88f1dda91da20cb2007068824b55fcf.webp"
+      },
+      "sortOrder": 3,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "character-4",
+      "projectId": "lightward",
+      "entityType": "character",
+      "title": "阿砾",
+      "subtitle": "",
+      "summary": "船坞修理工，收集被海水磨圆的螺帽。",
+      "status": "",
+      "tags": [],
+      "body": "船坞修理工，收集被海水磨圆的螺帽。 修好摆渡船之后，将那天的潮位记在了航海日志里。",
+      "data": {
+        "homeId": "location-4",
+        "timeline": [
+          {
+            "year": 15,
+            "event": "修好摆渡船",
+            "id": "life-0",
+            "when": "旧航季"
+          },
+          {
+            "year": 28,
+            "event": "建成维修台",
+            "id": "life-1",
+            "when": "白岬重启"
+          }
+        ],
+        "role": "商人",
+        "age": "41",
+        "race": "潮下船坞",
+        "appearance": "手腕上缠着防滑麻绳。",
+        "personality": "爱讲价，也肯赊账。",
+        "speech": "习惯先报工时。",
+        "motivation": "让失修的船都能等到下一次涨潮。",
+        "arc": "从守着船坞到主动出航。",
+        "avatarAsset": "d3f3c9ec1705f752e650466c640a97ed5bdca5e98550172f1e0352745681e505.webp"
+      },
+      "sortOrder": 4,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "character-5",
+      "projectId": "lightward",
+      "entityType": "character",
+      "title": "岑白",
+      "subtitle": "",
+      "summary": "归潮会的信使，总在退潮前离开。",
+      "status": "",
+      "tags": [],
+      "body": "归潮会的信使，总在退潮前离开。 接到密信之后，将那天的潮位记在了航海日志里。",
+      "data": {
+        "homeId": "location-5",
+        "timeline": [
+          {
+            "year": 16,
+            "event": "接到密信",
+            "id": "life-0",
+            "when": "旧航季"
+          },
+          {
+            "year": 28,
+            "event": "暗渡旧港",
+            "id": "life-1",
+            "when": "白岬重启"
+          }
+        ],
+        "role": "神秘人物",
+        "age": "27",
+        "race": "沉港遗民",
+        "appearance": "雨披的内衬绣着一张旧街图。",
+        "personality": "警惕陌生来船。",
+        "speech": "总用旧地名。",
+        "motivation": "把遗民的来信送回海面。",
+        "arc": "从秘密送信到公开作证。",
+        "avatarAsset": "b37b9c20b6b83d0ab0e758e8e410d90e7eca72b783245a99d36687da150f4df7.webp"
+      },
+      "sortOrder": 5,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "location-1",
+      "projectId": "lightward",
+      "entityType": "location",
+      "title": "雾海群岛",
+      "subtitle": "",
+      "summary": "被环流包围的五座岛屿。",
+      "status": "",
+      "tags": [],
+      "body": "被环流包围的五座岛屿。 循潮汐选择靠岸窗口，浓雾会遮挡远处信标。",
+      "data": {
+        "parentId": null,
+        "locationType": "海域",
+        "features": "循潮汐选择靠岸窗口，浓雾会遮挡远处信标。",
+        "inhabitants": "摆渡船队、灰背海鸥",
+        "coverAsset": "2825749fe298e2f9e4539e1dd5835fb91d817af18b6b034bcf4bf20b7894284e.webp"
+      },
+      "sortOrder": 1,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "location-2",
+      "projectId": "lightward",
+      "entityType": "location",
+      "title": "雾港",
+      "subtitle": "",
+      "summary": "领航员和摆渡船共同的母港。",
+      "status": "",
+      "tags": [],
+      "body": "领航员和摆渡船共同的母港。 码头接取委托，邮亭可交换线索。",
+      "data": {
+        "parentId": "location-1",
+        "locationType": "城镇",
+        "features": "码头接取委托，邮亭可交换线索。",
+        "inhabitants": "领航员、修帆匠、邮差",
+        "coverAsset": "c2d15d4b9b2c640e039a4afecd34904fc20422fe534cc497718a72084539dbb5.webp"
+      },
+      "sortOrder": 2,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "location-3",
+      "projectId": "lightward",
+      "entityType": "location",
+      "title": "白岬灯塔",
+      "subtitle": "",
+      "summary": "屹立在白色岩岬上的孤塔。",
+      "status": "",
+      "tags": [],
+      "body": "屹立在白色岩岬上的孤塔。 沿环梯修复反射镜，让光束跨过雾层。",
+      "data": {
+        "parentId": "location-1",
+        "locationType": "建筑",
+        "features": "沿环梯修复反射镜，让光束跨过雾层。",
+        "inhabitants": "白岬守灯人",
+        "coverAsset": "27f52385000af7ce578b42db2a4c683134d2f6a1a720091facd444bccb7a2d4d.webp"
+      },
+      "sortOrder": 3,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "location-4",
+      "projectId": "lightward",
+      "entityType": "location",
+      "title": "灯室",
+      "subtitle": "",
+      "summary": "镜架上仍留着一道未擦净的盐痕。",
+      "status": "",
+      "tags": [],
+      "body": "镜架上仍留着一道未擦净的盐痕。 转动镜架，从四块碎镜中还原信号。",
+      "data": {
+        "parentId": "location-3",
+        "locationType": "建筑",
+        "features": "转动镜架，从四块碎镜中还原信号。",
+        "inhabitants": "交班学徒与避风的海鸟",
+        "coverAsset": "5e9feb78b17fcb0faff613106b4957098b6678d9f5b60c064091c39c0627096c.webp"
+      },
+      "sortOrder": 4,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "location-5",
+      "projectId": "lightward",
+      "entityType": "location",
+      "title": "潮下船坞",
+      "subtitle": "",
+      "summary": "两小时退潮窗口内开放的船坞。",
+      "status": "",
+      "tags": [],
+      "body": "两小时退潮窗口内开放的船坞。 退潮后修船，涨潮前从东侧栈桥离开。",
+      "data": {
+        "parentId": "location-2",
+        "locationType": "据点",
+        "features": "退潮后修船，涨潮前从东侧栈桥离开。",
+        "inhabitants": "修理工、打捞队",
+        "coverAsset": "3c4985e1fd048cc675114ea181b8ce35783258593d44f3047bde07d5c0ed4b43.webp"
+      },
+      "sortOrder": 5,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "faction-1",
+      "projectId": "lightward",
+      "entityType": "faction",
+      "title": "引灯人",
+      "subtitle": "",
+      "summary": "维护群岛的引航灯与夜航秩序。",
+      "status": "",
+      "tags": [],
+      "body": "维护群岛的引航灯与夜航秩序。 上次长雾后，总部开始按潮次重整名册。",
+      "data": {
+        "members": [
+          {
+            "id": "roster-0",
+            "rank": "领队",
+            "role": "领航",
+            "characterId": "character-1"
+          },
+          {
+            "id": "roster-1",
+            "rank": "专员",
+            "role": "值守",
+            "characterId": "character-2"
+          }
+        ],
+        "relations": [
+          {
+            "targetId": "faction-2",
+            "level": 2
+          },
+          {
+            "targetId": "faction-3",
+            "level": -2
+          }
+        ],
+        "color": "#32758a",
+        "attitude": "友善",
+        "factionType": "守望组织",
+        "motto": "只要还有一盏灯，就还有一条归路。",
+        "hqLocationId": "location-3",
+        "territory": "白岬沿岸",
+        "goals": "保持夜航点灯",
+        "ratings": [
+          {
+            "id": "crew",
+            "label": "人力",
+            "value": 72
+          },
+          {
+            "id": "supply",
+            "label": "补给",
+            "value": 60
+          }
+        ],
+        "diplomacy": {
+          "faction-2": "盟约",
+          "faction-3": "敌对"
+        },
+        "icon": "🕯️"
+      },
+      "sortOrder": 1,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "faction-2",
+      "projectId": "lightward",
+      "entityType": "faction",
+      "title": "潮图公社",
+      "subtitle": "",
+      "summary": "公开海图，相信知识应流向每个港湾。",
+      "status": "",
+      "tags": [],
+      "body": "公开海图，相信知识应流向每个港湾。 上次长雾后，总部开始按潮次重整名册。",
+      "data": {
+        "members": [
+          {
+            "id": "roster-0",
+            "rank": "领队",
+            "role": "领航",
+            "characterId": "character-3"
+          },
+          {
+            "id": "roster-1",
+            "rank": "专员",
+            "role": "值守",
+            "characterId": "character-4"
+          }
+        ],
+        "relations": [
+          {
+            "targetId": "faction-1",
+            "level": 2
+          },
+          {
+            "targetId": "faction-3",
+            "level": 1
+          }
+        ],
+        "color": "#67824a",
+        "attitude": "中立",
+        "factionType": "测绘公社",
+        "motto": "海图应当能被每个人抄走。",
+        "hqLocationId": "location-2",
+        "territory": "群岛外环",
+        "goals": "公布完整海图",
+        "ratings": [
+          {
+            "id": "crew",
+            "label": "人力",
+            "value": 54
+          },
+          {
+            "id": "supply",
+            "label": "补给",
+            "value": 84
+          }
+        ],
+        "diplomacy": {
+          "faction-1": "盟约",
+          "faction-3": "中立"
+        },
+        "icon": "🧭"
+      },
+      "sortOrder": 2,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "faction-3",
+      "projectId": "lightward",
+      "entityType": "faction",
+      "title": "归潮会",
+      "subtitle": "",
+      "summary": "想让沉港重归海面的一群幸存者。",
+      "status": "",
+      "tags": [],
+      "body": "想让沉港重归海面的一群幸存者。 上次长雾后，总部开始按潮次重整名册。",
+      "data": {
+        "members": [
+          {
+            "id": "roster-0",
+            "rank": "领队",
+            "role": "领航",
+            "characterId": "character-5"
+          }
+        ],
+        "relations": [
+          {
+            "targetId": "faction-1",
+            "level": -2
+          },
+          {
+            "targetId": "faction-2",
+            "level": 1
+          }
+        ],
+        "color": "#a95f55",
+        "attitude": "警惕",
+        "factionType": "遗民结社",
+        "motto": "潮落之处，故乡仍在。",
+        "hqLocationId": "location-5",
+        "territory": "旧港海床",
+        "goals": "让沉港重新浮出",
+        "ratings": [
+          {
+            "id": "crew",
+            "label": "人力",
+            "value": 38
+          },
+          {
+            "id": "supply",
+            "label": "补给",
+            "value": 45
+          }
+        ],
+        "diplomacy": {
+          "faction-1": "敌对",
+          "faction-2": "中立"
+        },
+        "icon": "🌊"
+      },
+      "sortOrder": 3,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "vehicle-1",
+      "projectId": "lightward",
+      "entityType": "vehicle",
+      "title": "拾光号",
+      "subtitle": "",
+      "summary": "窄体帆艇，可在礁群间快速转向。",
+      "status": "",
+      "tags": [],
+      "body": "逆风时需要绕行外环水道。",
+      "data": {
+        "speed": 14,
+        "crew": 2,
+        "range": 70,
+        "vehicleType": "水上",
+        "ownerCharacterId": "character-1",
+        "ownerFactionId": "faction-1",
+        "appearance": "浅色帆面下是一条狭长木船。",
+        "stats": [
+          {
+            "id": "perf-0",
+            "label": "速度",
+            "value": 82
+          },
+          {
+            "id": "perf-1",
+            "label": "加速",
+            "value": 75
+          },
+          {
+            "id": "perf-2",
+            "label": "操控",
+            "value": 88
+          },
+          {
+            "id": "perf-3",
+            "label": "耐久",
+            "value": 48
+          },
+          {
+            "id": "perf-4",
+            "label": "载重",
+            "value": 35
+          }
+        ],
+        "specs": [
+          {
+            "id": "crew",
+            "label": "定员",
+            "value": "2 人"
+          },
+          {
+            "id": "range",
+            "label": "续航",
+            "value": "70 海里"
+          }
+        ],
+        "upgrades": "更换轻帆 → 加装折光镜架",
+        "partItemIds": [
+          "item-5",
+          "item-6"
+        ],
+        "imageAsset": "2eba656c0a87900c59bbe7da272e37546726306f1788f48e9643607991a33bf1.webp"
+      },
+      "sortOrder": 1,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "vehicle-2",
+      "projectId": "lightward",
+      "entityType": "vehicle",
+      "title": "潮背潜舟",
+      "subtitle": "",
+      "summary": "配有测深钟的浅水潜舟。",
+      "status": "",
+      "tags": [],
+      "body": "浮出前先听钟声，避免与返航船相撞。",
+      "data": {
+        "speed": 6,
+        "crew": 3,
+        "range": 32,
+        "vehicleType": "水上",
+        "ownerCharacterId": "character-3",
+        "ownerFactionId": "faction-2",
+        "appearance": "铆接铜壳包住向下突出的测深钟。",
+        "stats": [
+          {
+            "id": "perf-0",
+            "label": "速度",
+            "value": 48
+          },
+          {
+            "id": "perf-1",
+            "label": "加速",
+            "value": 40
+          },
+          {
+            "id": "perf-2",
+            "label": "操控",
+            "value": 62
+          },
+          {
+            "id": "perf-3",
+            "label": "耐久",
+            "value": 84
+          },
+          {
+            "id": "perf-4",
+            "label": "载重",
+            "value": 72
+          }
+        ],
+        "specs": [
+          {
+            "id": "crew",
+            "label": "定员",
+            "value": "3 人"
+          },
+          {
+            "id": "range",
+            "label": "续航",
+            "value": "32 海里"
+          }
+        ],
+        "upgrades": "加固潜壳 → 双钟同步测深",
+        "partItemIds": [
+          "item-6",
+          "item-7"
+        ],
+        "imageAsset": "173b5d2881fdb685d3c690602c75260a2f57ac168c61d35aee87f58873fecbcb.webp"
+      },
+      "sortOrder": 2,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "item-1",
+      "projectId": "lightward",
+      "entityType": "item",
+      "title": "雾盐",
+      "subtitle": "",
+      "summary": "潮退时留下的结晶。",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "rarity": "普通",
+        "stack": 20,
+        "category": "材料",
+        "stackLimit": 20,
+        "price": 3,
+        "attributes": [
+          {
+            "id": "attr",
+            "key": "重量",
+            "value": "0.1 kg"
+          }
+        ],
+        "effect": "吸附雾气",
+        "obtainMethod": "岸边采集",
+        "icon": "🧂"
+      },
+      "sortOrder": 1,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "item-2",
+      "projectId": "lightward",
+      "entityType": "item",
+      "title": "青铜扣",
+      "subtitle": "",
+      "summary": "旧船扣上拆下的黄铜。",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "rarity": "普通",
+        "stack": 20,
+        "category": "部件",
+        "stackLimit": 20,
+        "price": 6,
+        "attributes": [
+          {
+            "id": "attr",
+            "key": "重量",
+            "value": "0.2 kg"
+          }
+        ],
+        "effect": "固定镜座",
+        "obtainMethod": "潮下船坞",
+        "icon": "⚙️"
+      },
+      "sortOrder": 2,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "item-3",
+      "projectId": "lightward",
+      "entityType": "item",
+      "title": "透光砂",
+      "subtitle": "",
+      "summary": "能折射雾中灯光的细砂。",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "rarity": "普通",
+        "stack": 20,
+        "category": "材料",
+        "stackLimit": 20,
+        "price": 8,
+        "attributes": [
+          {
+            "id": "attr",
+            "key": "重量",
+            "value": "0.3 kg"
+          }
+        ],
+        "effect": "折射光线",
+        "obtainMethod": "岸边采集",
+        "icon": "💎"
+      },
+      "sortOrder": 3,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "item-4",
+      "projectId": "lightward",
+      "entityType": "item",
+      "title": "沉船木",
+      "subtitle": "",
+      "summary": "可再用的耐潮船材。",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "rarity": "普通",
+        "stack": 20,
+        "category": "材料",
+        "stackLimit": 20,
+        "price": 5,
+        "attributes": [
+          {
+            "id": "attr",
+            "key": "重量",
+            "value": "2.0 kg"
+          }
+        ],
+        "effect": "修补船舷",
+        "obtainMethod": "岸边采集",
+        "icon": "🪵"
+      },
+      "sortOrder": 4,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "item-5",
+      "projectId": "lightward",
+      "entityType": "item",
+      "title": "折光镜",
+      "subtitle": "",
+      "summary": "灯架上的关键镜片。",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "rarity": "精良",
+        "stack": 1,
+        "category": "部件",
+        "stackLimit": 1,
+        "price": 45,
+        "attributes": [
+          {
+            "id": "attr",
+            "key": "重量",
+            "value": "0.4 kg"
+          }
+        ],
+        "effect": "校准灯束",
+        "obtainMethod": "潮下船坞",
+        "icon": "🪞"
+      },
+      "sortOrder": 5,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "item-6",
+      "projectId": "lightward",
+      "entityType": "item",
+      "title": "潮声罗盘",
+      "subtitle": "",
+      "summary": "会跟随安全潮向转动。",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "rarity": "精良",
+        "stack": 1,
+        "category": "工具",
+        "stackLimit": 1,
+        "price": 60,
+        "attributes": [
+          {
+            "id": "attr",
+            "key": "重量",
+            "value": "0.2 kg"
+          }
+        ],
+        "effect": "指示安全潮向",
+        "obtainMethod": "潮下船坞",
+        "icon": "🧭"
+      },
+      "sortOrder": 6,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "item-7",
+      "projectId": "lightward",
+      "entityType": "item",
+      "title": "便携雾灯",
+      "subtitle": "",
+      "summary": "携行时照亮身前三步。",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "rarity": "精良",
+        "stack": 1,
+        "category": "工具",
+        "stackLimit": 1,
+        "price": 35,
+        "attributes": [
+          {
+            "id": "attr",
+            "key": "重量",
+            "value": "1.1 kg"
+          }
+        ],
+        "effect": "驱散近处海雾",
+        "obtainMethod": "潮下船坞",
+        "icon": "🏮"
+      },
+      "sortOrder": 7,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "item-8",
+      "projectId": "lightward",
+      "entityType": "item",
+      "title": "修船套件",
+      "subtitle": "",
+      "summary": "修补船舷裂缝的工具包。",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "rarity": "精良",
+        "stack": 1,
+        "category": "消耗品",
+        "stackLimit": 1,
+        "price": 20,
+        "attributes": [
+          {
+            "id": "attr",
+            "key": "重量",
+            "value": "0.9 kg"
+          }
+        ],
+        "effect": "恢复船体耐久",
+        "obtainMethod": "潮下船坞",
+        "icon": "🧰"
+      },
+      "sortOrder": 8,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "item-9",
+      "projectId": "lightward",
+      "entityType": "item",
+      "title": "船坞工作台",
+      "subtitle": "",
+      "summary": "配有夹具与刻度尺的固定工位。",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "category": "工具",
+        "rarity": "精良",
+        "stackLimit": 1,
+        "price": 95,
+        "attributes": [
+          {
+            "id": "attr",
+            "key": "重量",
+            "value": "25 kg"
+          }
+        ],
+        "effect": "支持组装镜架",
+        "obtainMethod": "潮下船坞",
+        "icon": "🛠️"
+      },
+      "sortOrder": 9,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "collectible-1",
+      "projectId": "lightward",
+      "entityType": "collectible",
+      "title": "北堤信笺",
+      "subtitle": "",
+      "summary": "写给守夜人的第一封信。",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "series": "雾海来信",
+        "number": 1,
+        "seriesSize": 6,
+        "seriesIndex": 1,
+        "category": "收集品",
+        "rarity": "普通",
+        "implemented": true,
+        "hidden": false,
+        "locationId": "location-2",
+        "questId": "quest-3",
+        "placement": "北堤长椅下",
+        "obtainMethod": "调查互动点并阅读信笺",
+        "icon": "✉️"
+      },
+      "sortOrder": 1,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "collectible-2",
+      "projectId": "lightward",
+      "entityType": "collectible",
+      "title": "钟楼信笺",
+      "subtitle": "",
+      "summary": "钟声盖过的告别。",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "series": "雾海来信",
+        "number": 2,
+        "seriesSize": 6,
+        "seriesIndex": 2,
+        "category": "收集品",
+        "rarity": "普通",
+        "implemented": true,
+        "hidden": false,
+        "locationId": "location-2",
+        "questId": "quest-3",
+        "placement": "钟楼门框",
+        "obtainMethod": "调查互动点并阅读信笺",
+        "icon": "📬"
+      },
+      "sortOrder": 2,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "collectible-3",
+      "projectId": "lightward",
+      "entityType": "collectible",
+      "title": "灯室信笺",
+      "subtitle": "",
+      "summary": "纸角沾着灯油。",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "series": "雾海来信",
+        "number": 5,
+        "seriesSize": 6,
+        "seriesIndex": 5,
+        "category": "收集品",
+        "rarity": "稀有",
+        "implemented": false,
+        "hidden": true,
+        "locationId": "location-4",
+        "questId": "quest-3",
+        "placement": "镜座夹层",
+        "obtainMethod": "调查互动点并阅读信笺",
+        "icon": "🕯️"
+      },
+      "sortOrder": 3,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "collectible-4",
+      "projectId": "lightward",
+      "entityType": "collectible",
+      "title": "渡口信笺",
+      "subtitle": "",
+      "summary": "等候最后一班渡船。",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "series": "雾海来信",
+        "number": 6,
+        "seriesSize": 6,
+        "seriesIndex": 6,
+        "category": "收集品",
+        "rarity": "普通",
+        "implemented": false,
+        "hidden": false,
+        "locationId": "location-2",
+        "questId": "quest-3",
+        "placement": "旧售票窗",
+        "obtainMethod": "调查互动点并阅读信笺",
+        "icon": "📮"
+      },
+      "sortOrder": 4,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "collectible-5",
+      "projectId": "lightward",
+      "entityType": "collectible",
+      "title": "盐场信笺",
+      "subtitle": "",
+      "summary": "盐霜留下的掌纹。",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "series": "退潮手札",
+        "number": 1,
+        "seriesSize": 2,
+        "seriesIndex": 1,
+        "category": "收集品",
+        "rarity": "普通",
+        "implemented": true,
+        "hidden": false,
+        "locationId": "location-1",
+        "questId": "quest-3",
+        "placement": "盐田木桩",
+        "obtainMethod": "调查互动点并阅读信笺",
+        "icon": "📜"
+      },
+      "sortOrder": 5,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "collectible-6",
+      "projectId": "lightward",
+      "entityType": "collectible",
+      "title": "潮眼信笺",
+      "subtitle": "",
+      "summary": "潮水卷回的迟信。",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "series": "退潮手札",
+        "number": 2,
+        "seriesSize": 2,
+        "seriesIndex": 2,
+        "category": "收集品",
+        "rarity": "稀有",
+        "implemented": false,
+        "hidden": true,
+        "locationId": "location-5",
+        "questId": "quest-3",
+        "placement": "测深钟内",
+        "obtainMethod": "调查互动点并阅读信笺",
+        "icon": "🗝️"
+      },
+      "sortOrder": 6,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "quest-1",
+      "projectId": "lightward",
+      "entityType": "quest",
+      "title": "重燃白岬",
+      "subtitle": "",
+      "summary": "为白岬灯塔更换折光镜。",
+      "status": "已写完",
+      "tags": [],
+      "body": "",
+      "data": {
+        "category": "主线",
+        "nodes": [
+          {
+            "id": "n0",
+            "label": "抵达码头",
+            "type": "start",
+            "x": 0,
+            "y": 0,
+            "description": "为白岬灯塔更换折光镜。"
+          },
+          {
+            "id": "n1",
+            "label": "向沈烛打听灯芯",
+            "type": "dialogue",
+            "x": 180,
+            "y": 0
+          },
+          {
+            "id": "n2",
+            "label": "接受委托",
+            "type": "action",
+            "x": 360,
+            "y": 0
+          },
+          {
+            "id": "n3",
+            "label": "收集透光砂",
+            "type": "collect",
+            "x": 540,
+            "y": 0
+          },
+          {
+            "id": "n4",
+            "label": "检查线索",
+            "type": "condition",
+            "x": 720,
+            "y": 0
+          },
+          {
+            "id": "n5",
+            "label": "返回补给",
+            "type": "action",
+            "x": 0,
+            "y": 100
+          },
+          {
+            "id": "n6",
+            "label": "维修镜架",
+            "type": "action",
+            "x": 180,
+            "y": 100
+          },
+          {
+            "id": "n7",
+            "label": "作出选择",
+            "type": "choice",
+            "x": 360,
+            "y": 100
+          },
+          {
+            "id": "n8",
+            "label": "点亮白岬",
+            "type": "reward",
+            "x": 540,
+            "y": 100
+          },
+          {
+            "id": "n9",
+            "label": "记入航海日志",
+            "type": "end",
+            "x": 720,
+            "y": 100
+          }
+        ],
+        "edges": [
+          {
+            "from": "n0",
+            "to": "n1",
+            "label": ""
+          },
+          {
+            "from": "n1",
+            "to": "n2",
+            "label": ""
+          },
+          {
+            "from": "n2",
+            "to": "n3",
+            "label": ""
+          },
+          {
+            "from": "n3",
+            "to": "n4",
+            "label": ""
+          },
+          {
+            "from": "n4",
+            "to": "n5",
+            "label": "未齐备"
+          },
+          {
+            "from": "n5",
+            "to": "n3",
+            "label": ""
+          },
+          {
+            "from": "n4",
+            "to": "n6",
+            "label": "已齐备"
+          },
+          {
+            "from": "n6",
+            "to": "n7",
+            "label": ""
+          },
+          {
+            "from": "n7",
+            "to": "n8",
+            "label": ""
+          },
+          {
+            "from": "n7",
+            "to": "n9",
+            "label": ""
+          },
+          {
+            "from": "n8",
+            "to": "n9",
+            "label": ""
+          }
+        ],
+        "locationId": "location-3",
+        "durationMinutes": 45,
+        "level": 1,
+        "giverId": "character-1",
+        "prerequisites": [],
+        "objectives": [
+          {
+            "text": "接受委托",
+            "done": false
+          }
+        ],
+        "rewards": "折光镜与灯塔通行证"
+      },
+      "sortOrder": 1,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "quest-2",
+      "projectId": "lightward",
+      "entityType": "quest",
+      "title": "绘出失名航道",
+      "subtitle": "",
+      "summary": "跟随黎鸥记录三次回声。",
+      "status": "构思中",
+      "tags": [],
+      "body": "",
+      "data": {
+        "category": "主线",
+        "nodes": [
+          {
+            "id": "n0",
+            "label": "抵达码头",
+            "type": "start",
+            "x": 0,
+            "y": 0,
+            "description": "跟随黎鸥记录三次回声。"
+          },
+          {
+            "id": "n1",
+            "label": "询问黎鸥",
+            "type": "dialogue",
+            "x": 180,
+            "y": 0
+          },
+          {
+            "id": "n2",
+            "label": "接受委托",
+            "type": "action",
+            "x": 360,
+            "y": 0
+          },
+          {
+            "id": "n3",
+            "label": "记录深沟回声",
+            "type": "collect",
+            "x": 540,
+            "y": 0
+          },
+          {
+            "id": "n4",
+            "label": "检查线索",
+            "type": "condition",
+            "x": 720,
+            "y": 0
+          },
+          {
+            "id": "n5",
+            "label": "返回补给",
+            "type": "action",
+            "x": 0,
+            "y": 100
+          },
+          {
+            "id": "n6",
+            "label": "标注暗礁",
+            "type": "action",
+            "x": 180,
+            "y": 100
+          },
+          {
+            "id": "n7",
+            "label": "作出选择",
+            "type": "choice",
+            "x": 360,
+            "y": 100
+          },
+          {
+            "id": "n8",
+            "label": "交付新海图",
+            "type": "reward",
+            "x": 540,
+            "y": 100
+          },
+          {
+            "id": "n9",
+            "label": "记入航海日志",
+            "type": "end",
+            "x": 720,
+            "y": 100
+          }
+        ],
+        "edges": [
+          {
+            "from": "n0",
+            "to": "n1",
+            "label": ""
+          },
+          {
+            "from": "n1",
+            "to": "n2",
+            "label": ""
+          },
+          {
+            "from": "n2",
+            "to": "n3",
+            "label": ""
+          },
+          {
+            "from": "n3",
+            "to": "n4",
+            "label": ""
+          },
+          {
+            "from": "n4",
+            "to": "n5",
+            "label": "未齐备"
+          },
+          {
+            "from": "n5",
+            "to": "n3",
+            "label": ""
+          },
+          {
+            "from": "n4",
+            "to": "n6",
+            "label": "已齐备"
+          },
+          {
+            "from": "n6",
+            "to": "n7",
+            "label": ""
+          },
+          {
+            "from": "n7",
+            "to": "n8",
+            "label": ""
+          },
+          {
+            "from": "n7",
+            "to": "n9",
+            "label": ""
+          },
+          {
+            "from": "n8",
+            "to": "n9",
+            "label": ""
+          }
+        ],
+        "locationId": "location-1",
+        "durationMinutes": 35,
+        "level": 2,
+        "giverId": "character-2",
+        "prerequisites": [
+          "quest-1"
+        ],
+        "objectives": [
+          {
+            "text": "接受委托",
+            "done": false
+          }
+        ],
+        "rewards": "更新的海图"
+      },
+      "sortOrder": 2,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "quest-3",
+      "projectId": "lightward",
+      "entityType": "quest",
+      "title": "拾回雾中来信",
+      "subtitle": "",
+      "summary": "把散落在港湾的信交还写信人。",
+      "status": "已实装",
+      "tags": [],
+      "body": "",
+      "data": {
+        "category": "支线",
+        "nodes": [
+          {
+            "id": "n0",
+            "label": "抵达码头",
+            "type": "start",
+            "x": 0,
+            "y": 0,
+            "description": "把散落在港湾的信交还写信人。"
+          },
+          {
+            "id": "n1",
+            "label": "拜访邮亭",
+            "type": "dialogue",
+            "x": 180,
+            "y": 0
+          },
+          {
+            "id": "n2",
+            "label": "接受委托",
+            "type": "action",
+            "x": 360,
+            "y": 0
+          },
+          {
+            "id": "n3",
+            "label": "寻回湿信",
+            "type": "collect",
+            "x": 540,
+            "y": 0
+          },
+          {
+            "id": "n4",
+            "label": "检查线索",
+            "type": "condition",
+            "x": 720,
+            "y": 0
+          },
+          {
+            "id": "n5",
+            "label": "返回补给",
+            "type": "action",
+            "x": 0,
+            "y": 100
+          },
+          {
+            "id": "n6",
+            "label": "询问笔迹",
+            "type": "action",
+            "x": 180,
+            "y": 100
+          },
+          {
+            "id": "n7",
+            "label": "作出选择",
+            "type": "choice",
+            "x": 360,
+            "y": 100
+          },
+          {
+            "id": "n8",
+            "label": "送还末封信",
+            "type": "reward",
+            "x": 540,
+            "y": 100
+          },
+          {
+            "id": "n9",
+            "label": "记入航海日志",
+            "type": "end",
+            "x": 720,
+            "y": 100
+          }
+        ],
+        "edges": [
+          {
+            "from": "n0",
+            "to": "n1",
+            "label": ""
+          },
+          {
+            "from": "n1",
+            "to": "n2",
+            "label": ""
+          },
+          {
+            "from": "n2",
+            "to": "n3",
+            "label": ""
+          },
+          {
+            "from": "n3",
+            "to": "n4",
+            "label": ""
+          },
+          {
+            "from": "n4",
+            "to": "n5",
+            "label": "未齐备"
+          },
+          {
+            "from": "n5",
+            "to": "n3",
+            "label": ""
+          },
+          {
+            "from": "n4",
+            "to": "n6",
+            "label": "已齐备"
+          },
+          {
+            "from": "n6",
+            "to": "n7",
+            "label": ""
+          },
+          {
+            "from": "n7",
+            "to": "n8",
+            "label": ""
+          },
+          {
+            "from": "n7",
+            "to": "n9",
+            "label": ""
+          },
+          {
+            "from": "n8",
+            "to": "n9",
+            "label": ""
+          }
+        ],
+        "locationId": "location-2",
+        "durationMinutes": 20,
+        "level": 3,
+        "giverId": "character-3",
+        "prerequisites": [],
+        "objectives": [
+          {
+            "text": "接受委托",
+            "done": true
+          }
+        ],
+        "rewards": "北堤来信"
+      },
+      "sortOrder": 3,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "quest-4",
+      "projectId": "lightward",
+      "entityType": "quest",
+      "title": "最后一班潮声",
+      "subtitle": "",
+      "summary": "在无人值守时敲响潮钟。",
+      "status": "构思中",
+      "tags": [],
+      "body": "",
+      "data": {
+        "category": "隐藏",
+        "nodes": [
+          {
+            "id": "n0",
+            "label": "抵达码头",
+            "type": "start",
+            "x": 0,
+            "y": 0,
+            "description": "在无人值守时敲响潮钟。"
+          },
+          {
+            "id": "n1",
+            "label": "聆听夜潮",
+            "type": "dialogue",
+            "x": 180,
+            "y": 0
+          },
+          {
+            "id": "n2",
+            "label": "接受委托",
+            "type": "action",
+            "x": 360,
+            "y": 0
+          },
+          {
+            "id": "n3",
+            "label": "拾取钟锤",
+            "type": "collect",
+            "x": 540,
+            "y": 0
+          },
+          {
+            "id": "n4",
+            "label": "检查线索",
+            "type": "condition",
+            "x": 720,
+            "y": 0
+          },
+          {
+            "id": "n5",
+            "label": "返回补给",
+            "type": "action",
+            "x": 0,
+            "y": 100
+          },
+          {
+            "id": "n6",
+            "label": "辨别假回声",
+            "type": "action",
+            "x": 180,
+            "y": 100
+          },
+          {
+            "id": "n7",
+            "label": "作出选择",
+            "type": "choice",
+            "x": 360,
+            "y": 100
+          },
+          {
+            "id": "n8",
+            "label": "敲响潮钟",
+            "type": "reward",
+            "x": 540,
+            "y": 100
+          },
+          {
+            "id": "n9",
+            "label": "记入航海日志",
+            "type": "end",
+            "x": 720,
+            "y": 100
+          }
+        ],
+        "edges": [
+          {
+            "from": "n0",
+            "to": "n1",
+            "label": ""
+          },
+          {
+            "from": "n1",
+            "to": "n2",
+            "label": ""
+          },
+          {
+            "from": "n2",
+            "to": "n3",
+            "label": ""
+          },
+          {
+            "from": "n3",
+            "to": "n4",
+            "label": ""
+          },
+          {
+            "from": "n4",
+            "to": "n5",
+            "label": "未齐备"
+          },
+          {
+            "from": "n5",
+            "to": "n3",
+            "label": ""
+          },
+          {
+            "from": "n4",
+            "to": "n6",
+            "label": "已齐备"
+          },
+          {
+            "from": "n6",
+            "to": "n7",
+            "label": ""
+          },
+          {
+            "from": "n7",
+            "to": "n8",
+            "label": ""
+          },
+          {
+            "from": "n7",
+            "to": "n9",
+            "label": ""
+          },
+          {
+            "from": "n8",
+            "to": "n9",
+            "label": ""
+          }
+        ],
+        "locationId": "location-4",
+        "durationMinutes": 15,
+        "level": 4,
+        "giverId": "character-4",
+        "prerequisites": [],
+        "objectives": [
+          {
+            "text": "接受委托",
+            "done": false
+          }
+        ],
+        "rewards": "末班船票"
+      },
+      "sortOrder": 4,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "scene-1",
+      "projectId": "lightward",
+      "entityType": "scene",
+      "title": "初抵雾港",
+      "subtitle": "",
+      "summary": "雾笛落下，船头轻碰栈桥。",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "locationId": "location-2",
+        "dialogues": [
+          {
+            "speakerId": "character-1",
+            "text": "雾里也有人等船吗？"
+          },
+          {
+            "speakerId": "character-2",
+            "text": "只要笛还响，就有人回来。"
+          },
+          {
+            "speakerId": "character-1",
+            "text": "那就给我一盏灯吧。"
+          }
+        ],
+        "castIds": [
+          "character-1",
+          "character-2"
+        ],
+        "questId": "quest-1",
+        "lines": [
+          {
+            "id": "scene-1-line-0",
+            "speakerId": "narrator",
+            "speakerName": "旁白",
+            "text": "雾笛落下，船头轻碰栈桥。",
+            "mood": ""
+          },
+          {
+            "id": "scene-1-line-1",
+            "speakerId": "character-1",
+            "speakerName": "陆汐",
+            "text": "雾里也有人等船吗？",
+            "mood": "向栈桥张望"
+          },
+          {
+            "id": "scene-1-line-2",
+            "speakerId": "character-2",
+            "speakerName": "沈烛",
+            "text": "只要笛还响，就有人回来。",
+            "mood": "隔雾应声"
+          },
+          {
+            "id": "scene-1-line-3",
+            "speakerId": "character-1",
+            "speakerName": "陆汐",
+            "text": "那就给我一盏灯吧。",
+            "mood": "握紧罗盘"
+          },
+          {
+            "id": "scene-1-line-4",
+            "speakerId": "narrator",
+            "speakerName": "旁白",
+            "text": "栈桥尽头亮起一点橘光，陆汐沿着湿漉漉的缆绳走过去。",
+            "mood": ""
+          }
+        ]
+      },
+      "sortOrder": 1,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "scene-2",
+      "projectId": "lightward",
+      "entityType": "scene",
+      "title": "灯室的秘密",
+      "subtitle": "",
+      "summary": "暗下来的灯室里，沈烛打开封存的镜箱。",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "locationId": "location-4",
+        "dialogues": [
+          {
+            "speakerId": "character-1",
+            "text": "你把谁的名字锁在这里？"
+          },
+          {
+            "speakerId": "character-2",
+            "text": "别读出声。海会听见。"
+          },
+          {
+            "speakerId": "character-1",
+            "text": "把镜子给我，我们一起修。"
+          }
+        ],
+        "castIds": [
+          "character-1",
+          "character-2"
+        ],
+        "questId": "quest-1",
+        "lines": [
+          {
+            "id": "scene-2-line-0",
+            "speakerId": "narrator",
+            "speakerName": "旁白",
+            "text": "暗下来的灯室里，沈烛打开封存的镜箱。",
+            "mood": ""
+          },
+          {
+            "id": "scene-2-line-1",
+            "speakerId": "character-1",
+            "speakerName": "陆汐",
+            "text": "你把谁的名字锁在这里？",
+            "mood": "压低声音"
+          },
+          {
+            "id": "scene-2-line-2",
+            "speakerId": "character-2",
+            "speakerName": "沈烛",
+            "text": "别读出声。海会听见。",
+            "mood": "按住镜箱"
+          },
+          {
+            "id": "scene-2-line-3",
+            "speakerId": "character-1",
+            "speakerName": "陆汐",
+            "text": "把镜子给我，我们一起修。",
+            "mood": "伸出手"
+          },
+          {
+            "id": "scene-2-line-4",
+            "speakerId": "narrator",
+            "speakerName": "旁白",
+            "text": "箱盖打开，一束极细的光从裂镜里落到两人的手上。",
+            "mood": ""
+          }
+        ]
+      },
+      "sortOrder": 2,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "scene-3",
+      "projectId": "lightward",
+      "entityType": "scene",
+      "title": "白岬告别",
+      "subtitle": "",
+      "summary": "第一束晨光照亮返航的帆。",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "locationId": "location-3",
+        "dialogues": [
+          {
+            "speakerId": "character-1",
+            "text": "灯亮了，你还能看见我吗？"
+          },
+          {
+            "speakerId": "character-2",
+            "text": "我记得这条路。够了。"
+          },
+          {
+            "speakerId": "character-1",
+            "text": "下次涨潮，我来接班。"
+          }
+        ],
+        "castIds": [
+          "character-1",
+          "character-2"
+        ],
+        "questId": "quest-4",
+        "lines": [
+          {
+            "id": "scene-3-line-0",
+            "speakerId": "narrator",
+            "speakerName": "旁白",
+            "text": "第一束晨光照亮返航的帆。",
+            "mood": ""
+          },
+          {
+            "id": "scene-3-line-1",
+            "speakerId": "character-1",
+            "speakerName": "陆汐",
+            "text": "灯亮了，你还能看见我吗？",
+            "mood": "迎着晨光"
+          },
+          {
+            "id": "scene-3-line-2",
+            "speakerId": "character-2",
+            "speakerName": "沈烛",
+            "text": "我记得这条路。够了。",
+            "mood": "望向海面"
+          },
+          {
+            "id": "scene-3-line-3",
+            "speakerId": "character-1",
+            "speakerName": "陆汐",
+            "text": "下次涨潮，我来接班。",
+            "mood": "回身挥手"
+          },
+          {
+            "id": "scene-3-line-4",
+            "speakerId": "narrator",
+            "speakerName": "旁白",
+            "text": "笛声在两座岛间来回响了三次，最后一次已经很远。",
+            "mood": ""
+          }
+        ]
+      },
+      "sortOrder": 3,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "concept_art-1",
+      "projectId": "lightward",
+      "entityType": "concept_art",
+      "title": "白岬暮色",
+      "subtitle": "",
+      "summary": "色彩脚本：暖橙引航光与靛蓝海面。",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "coverPreset": "lighthouse",
+        "boardPosition": [
+          120,
+          80
+        ],
+        "asset": "27f52385000af7ce578b42db2a4c683134d2f6a1a720091facd444bccb7a2d4d.webp",
+        "x": 0,
+        "y": 0,
+        "width": 265,
+        "height": 177,
+        "zIndex": 1,
+        "tags": [
+          "location-3"
+        ],
+        "groupId": "concept_art-coast"
+      },
+      "sortOrder": 1,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "bug-1",
+      "projectId": "lightward",
+      "entityType": "bug",
+      "title": "退潮边缘卡船",
+      "subtitle": "",
+      "summary": "靠近东侧浅滩时船身无法退出。",
+      "status": "待处理",
+      "tags": [],
+      "body": "",
+      "data": {
+        "severity": "严重"
+      },
+      "sortOrder": 1,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "bug-2",
+      "projectId": "lightward",
+      "entityType": "bug",
+      "title": "切换镜片闪白",
+      "subtitle": "",
+      "summary": "夜间替换镜片出现一帧白屏。",
+      "status": "已修复",
+      "tags": [],
+      "body": "",
+      "data": {
+        "severity": "一般"
+      },
+      "sortOrder": 2,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "bug-3",
+      "projectId": "lightward",
+      "entityType": "bug",
+      "title": "分支对白重复",
+      "subtitle": "",
+      "summary": "回读存档后首句播放两次。",
+      "status": "待处理",
+      "tags": [],
+      "body": "",
+      "data": {
+        "severity": "一般"
+      },
+      "sortOrder": 3,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "bug-4",
+      "projectId": "lightward",
+      "entityType": "bug",
+      "title": "海图针脚偏移",
+      "subtitle": "",
+      "summary": "缩放至两倍时标记偏右。",
+      "status": "待处理",
+      "tags": [],
+      "body": "",
+      "data": {
+        "severity": "轻微"
+      },
+      "sortOrder": 4,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "devlog-1",
+      "projectId": "lightward",
+      "entityType": "devlog",
+      "title": "第一束灯光",
+      "subtitle": "",
+      "summary": "完成首个可旋转的反射镜。",
+      "status": "",
+      "tags": [],
+      "body": "镜子终于能把海面上的一束光送进灯室。我们缩小了吸附范围，让最后一格转动仍需要观察。",
+      "data": {
+        "date": "@day:-7"
+      },
+      "sortOrder": 1,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "devlog-2",
+      "projectId": "lightward",
+      "entityType": "devlog",
+      "title": "让雾有呼吸",
+      "subtitle": "",
+      "summary": "把海雾的速度交给潮汐。",
+      "status": "",
+      "tags": [],
+      "body": "靠岸时雾的速度减慢了。留出三秒看清岸线，比再加一个指示标记更有效。",
+      "data": {
+        "date": "@day:-4"
+      },
+      "sortOrder": 2,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "devlog-3",
+      "projectId": "lightward",
+      "entityType": "devlog",
+      "title": "白岬走查手记",
+      "subtitle": "",
+      "summary": "记录首批测试者在白岬的停留点。",
+      "status": "",
+      "tags": [],
+      "body": "六位测试者中有四位在旧船坞错过台阶。下周把潮痕延伸到台阶扶手，并再做一次盲测。",
+      "data": {
+        "date": "@day:-1"
+      },
+      "sortOrder": 3,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "concept_art-2",
+      "projectId": "lightward",
+      "entityType": "concept_art",
+      "title": "港口的雾线",
+      "subtitle": "",
+      "summary": "领航员和摆渡船共同的母港。",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "asset": "c2d15d4b9b2c640e039a4afecd34904fc20422fe534cc497718a72084539dbb5.webp",
+        "x": 295,
+        "y": 24,
+        "width": 248,
+        "height": 164,
+        "zIndex": 2,
+        "tags": [
+          "location-2"
+        ],
+        "groupId": "concept_art-coast"
+      },
+      "sortOrder": 2,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "concept_art-3",
+      "projectId": "lightward",
+      "entityType": "concept_art",
+      "title": "拾光号帆装",
+      "subtitle": "",
+      "summary": "窄体帆艇，可在礁群间快速转向。",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "asset": "2eba656c0a87900c59bbe7da272e37546726306f1788f48e9643607991a33bf1.webp",
+        "x": 145,
+        "y": 228,
+        "width": 270,
+        "height": 180,
+        "zIndex": 3,
+        "tags": [
+          "vehicle-1"
+        ]
+      },
+      "sortOrder": 3,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "concept_art-coast",
+      "projectId": "lightward",
+      "entityType": "concept_art",
+      "title": "白岬沿岸 · 暮色与薄雾",
+      "subtitle": "",
+      "summary": "沿岸地点的光色对照。",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "kind": "group",
+        "color": "#528c8e",
+        "x": -16,
+        "y": -40,
+        "width": 575,
+        "height": 245
+      },
+      "sortOrder": 1,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    }
+  ],
+  "links": [
+    {
+      "id": "link-1",
+      "projectId": "lightward",
+      "sourceId": "character-1",
+      "targetId": "location-1",
+      "relationLabel": "驻留",
+      "linkKind": "reference",
+      "createdAt": "@day:-3T09:00:00Z"
+    },
+    {
+      "id": "link-2",
+      "projectId": "lightward",
+      "sourceId": "character-2",
+      "targetId": "location-2",
+      "relationLabel": "驻留",
+      "linkKind": "reference",
+      "createdAt": "@day:-3T09:00:00Z"
+    },
+    {
+      "id": "link-3",
+      "projectId": "lightward",
+      "sourceId": "character-3",
+      "targetId": "location-3",
+      "relationLabel": "驻留",
+      "linkKind": "reference",
+      "createdAt": "@day:-3T09:00:00Z"
+    },
+    {
+      "id": "link-4",
+      "projectId": "lightward",
+      "sourceId": "character-4",
+      "targetId": "location-4",
+      "relationLabel": "驻留",
+      "linkKind": "reference",
+      "createdAt": "@day:-3T09:00:00Z"
+    },
+    {
+      "id": "link-5",
+      "projectId": "lightward",
+      "sourceId": "character-5",
+      "targetId": "location-5",
+      "relationLabel": "驻留",
+      "linkKind": "reference",
+      "createdAt": "@day:-3T09:00:00Z"
+    },
+    {
+      "id": "link-6",
+      "projectId": "lightward",
+      "sourceId": "quest-1",
+      "targetId": "character-1",
+      "relationLabel": "委托人",
+      "linkKind": "reference",
+      "createdAt": "@day:-3T09:00:00Z"
+    },
+    {
+      "id": "link-7",
+      "projectId": "lightward",
+      "sourceId": "quest-1",
+      "targetId": "item-5",
+      "relationLabel": "任务物品",
+      "linkKind": "reference",
+      "createdAt": "@day:-3T09:00:00Z"
+    },
+    {
+      "id": "link-8",
+      "projectId": "lightward",
+      "sourceId": "scene-2",
+      "targetId": "quest-1",
+      "relationLabel": "推进剧情",
+      "linkKind": "reference",
+      "createdAt": "@day:-3T09:00:00Z"
+    },
+    {
+      "id": "link-9",
+      "projectId": "lightward",
+      "sourceId": "quest-2",
+      "targetId": "character-2",
+      "relationLabel": "委托人",
+      "linkKind": "reference",
+      "createdAt": "@day:-3T09:00:00Z"
+    },
+    {
+      "id": "link-10",
+      "projectId": "lightward",
+      "sourceId": "quest-2",
+      "targetId": "item-6",
+      "relationLabel": "任务物品",
+      "linkKind": "reference",
+      "createdAt": "@day:-3T09:00:00Z"
+    },
+    {
+      "id": "link-11",
+      "projectId": "lightward",
+      "sourceId": "scene-3",
+      "targetId": "quest-2",
+      "relationLabel": "推进剧情",
+      "linkKind": "reference",
+      "createdAt": "@day:-3T09:00:00Z"
+    },
+    {
+      "id": "link-12",
+      "projectId": "lightward",
+      "sourceId": "quest-3",
+      "targetId": "character-3",
+      "relationLabel": "委托人",
+      "linkKind": "reference",
+      "createdAt": "@day:-3T09:00:00Z"
+    },
+    {
+      "id": "link-13",
+      "projectId": "lightward",
+      "sourceId": "quest-3",
+      "targetId": "item-7",
+      "relationLabel": "任务物品",
+      "linkKind": "reference",
+      "createdAt": "@day:-3T09:00:00Z"
+    },
+    {
+      "id": "link-14",
+      "projectId": "lightward",
+      "sourceId": "scene-1",
+      "targetId": "quest-3",
+      "relationLabel": "推进剧情",
+      "linkKind": "reference",
+      "createdAt": "@day:-3T09:00:00Z"
+    },
+    {
+      "id": "link-15",
+      "projectId": "lightward",
+      "sourceId": "quest-4",
+      "targetId": "character-4",
+      "relationLabel": "委托人",
+      "linkKind": "reference",
+      "createdAt": "@day:-3T09:00:00Z"
+    },
+    {
+      "id": "link-16",
+      "projectId": "lightward",
+      "sourceId": "quest-4",
+      "targetId": "item-8",
+      "relationLabel": "任务物品",
+      "linkKind": "reference",
+      "createdAt": "@day:-3T09:00:00Z"
+    },
+    {
+      "id": "link-17",
+      "projectId": "lightward",
+      "sourceId": "scene-2",
+      "targetId": "quest-4",
+      "relationLabel": "推进剧情",
+      "linkKind": "reference",
+      "createdAt": "@day:-3T09:00:00Z"
+    },
+    {
+      "id": "link-18",
+      "projectId": "lightward",
+      "sourceId": "lore-1",
+      "targetId": "location-2",
+      "relationLabel": "提及",
+      "linkKind": "reference",
+      "createdAt": "@day:-3T09:00:00Z"
+    },
+    {
+      "id": "link-19",
+      "projectId": "lightward",
+      "sourceId": "lore-2",
+      "targetId": "location-3",
+      "relationLabel": "提及",
+      "linkKind": "reference",
+      "createdAt": "@day:-3T09:00:00Z"
+    },
+    {
+      "id": "link-20",
+      "projectId": "lightward",
+      "sourceId": "lore-3",
+      "targetId": "location-4",
+      "relationLabel": "提及",
+      "linkKind": "reference",
+      "createdAt": "@day:-3T09:00:00Z"
+    },
+    {
+      "id": "link-21",
+      "projectId": "lightward",
+      "sourceId": "lore-4",
+      "targetId": "location-5",
+      "relationLabel": "提及",
+      "linkKind": "reference",
+      "createdAt": "@day:-3T09:00:00Z"
+    },
+    {
+      "id": "link-22",
+      "projectId": "lightward",
+      "sourceId": "lore-5",
+      "targetId": "location-1",
+      "relationLabel": "提及",
+      "linkKind": "reference",
+      "createdAt": "@day:-3T09:00:00Z"
+    },
+    {
+      "id": "link-23",
+      "projectId": "lightward",
+      "sourceId": "lore-6",
+      "targetId": "location-2",
+      "relationLabel": "提及",
+      "linkKind": "reference",
+      "createdAt": "@day:-3T09:00:00Z"
+    }
+  ],
+  "timeEntries": [
+    {
+      "id": "time-0",
+      "projectId": "lightward",
+      "taskId": "task-1",
+      "startedAt": "@day:-6T09:00:00Z",
+      "endedAt": "@day:-6T10:00:00Z",
+      "durationSecs": 3600,
+      "note": "光束手感验证",
+      "isRunning": false,
+      "createdAt": "@day:-6T09:00:00Z"
+    },
+    {
+      "id": "time-1",
+      "projectId": "lightward",
+      "taskId": "task-2",
+      "startedAt": "@day:-5T09:00:00Z",
+      "endedAt": "@day:-5T11:00:00Z",
+      "durationSecs": 7200,
+      "note": "港口轮廓剪影",
+      "isRunning": false,
+      "createdAt": "@day:-5T09:00:00Z"
+    },
+    {
+      "id": "time-2",
+      "projectId": "lightward",
+      "taskId": "task-3",
+      "startedAt": "@day:-4T09:00:00Z",
+      "endedAt": "@day:-4T12:00:00Z",
+      "durationSecs": 10800,
+      "note": "时钟音效联调",
+      "isRunning": false,
+      "createdAt": "@day:-4T09:00:00Z"
+    },
+    {
+      "id": "time-3",
+      "projectId": "lightward",
+      "taskId": "task-4",
+      "startedAt": "@day:-3T09:00:00Z",
+      "endedAt": "@day:-3T10:00:00Z",
+      "durationSecs": 3600,
+      "note": "步道动线评审",
+      "isRunning": false,
+      "createdAt": "@day:-3T09:00:00Z"
+    },
+    {
+      "id": "time-4",
+      "projectId": "lightward",
+      "taskId": "task-5",
+      "startedAt": "@day:-2T09:00:00Z",
+      "endedAt": "@day:-2T11:00:00Z",
+      "durationSecs": 7200,
+      "note": "对白分支初稿",
+      "isRunning": false,
+      "createdAt": "@day:-2T09:00:00Z"
+    },
+    {
+      "id": "time-5",
+      "projectId": "lightward",
+      "taskId": "task-6",
+      "startedAt": "@day:-1T09:00:00Z",
+      "endedAt": "@day:-1T12:00:00Z",
+      "durationSecs": 10800,
+      "note": "潮声素材筛选",
+      "isRunning": false,
+      "createdAt": "@day:-1T09:00:00Z"
+    }
+  ],
+  "activity": [
+    {
+      "id": "activity-0",
+      "projectId": "lightward",
+      "entityId": "task-1",
+      "entityType": "task",
+      "action": "create",
+      "summary": "完成了「校准灯塔光束」",
+      "createdAt": "@day:-5T14:00:00Z"
+    },
+    {
+      "id": "activity-1",
+      "projectId": "lightward",
+      "entityId": "task-2",
+      "entityType": "task",
+      "action": "update",
+      "summary": "更新了雾港剪影",
+      "createdAt": "@day:-4T14:00:00Z"
+    },
+    {
+      "id": "activity-2",
+      "projectId": "lightward",
+      "entityId": "task-3",
+      "entityType": "task",
+      "action": "create",
+      "summary": "开始潮汐时钟交互",
+      "createdAt": "@day:-3T14:00:00Z"
+    },
+    {
+      "id": "activity-3",
+      "projectId": "lightward",
+      "entityId": "task-4",
+      "entityType": "task",
+      "action": "update",
+      "summary": "验收了白岬步道",
+      "createdAt": "@day:-2T14:00:00Z"
+    },
+    {
+      "id": "activity-4",
+      "projectId": "lightward",
+      "entityId": "task-5",
+      "entityType": "task",
+      "action": "create",
+      "summary": "修订守灯人对白",
+      "createdAt": "@day:-1T14:00:00Z"
+    },
+    {
+      "id": "activity-5",
+      "projectId": "lightward",
+      "entityId": "task-6",
+      "entityType": "task",
+      "action": "update",
+      "summary": "上传潮音采样记录",
+      "createdAt": "@day:0T14:00:00Z"
+    }
+  ],
+  "maps": [
+    {
+      "id": "map-harbor",
+      "projectId": "lightward",
+      "name": "雾海群岛 · 白岬航线",
+      "width": 12,
+      "height": 8,
+      "tileSize": 32,
+      "layers": [
+        {
+          "name": "海域与礁岸",
+          "visible": true,
+          "tiles": [
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            2,
+            2,
+            1,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            2,
+            2,
+            1,
+            1,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            1,
+            1,
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            2,
+            1,
+            2,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+            2,
+            2
+          ]
+        },
+        {
+          "name": "灯标与航道",
+          "visible": true,
+          "tiles": [
+            0,
+            4,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            4,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            4,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            4,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            4,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            4,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            4,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            4,
+            0,
+            0,
+            0
+          ],
+          "icons": [
+            {
+              "x": 5,
+              "y": 3,
+              "iconId": "beacon"
+            },
+            {
+              "x": 2,
+              "y": 4,
+              "iconId": "boat"
+            }
+          ]
+        }
+      ],
+      "pins": [
+        {
+          "label": "群岛航标",
+          "entityId": "location-1",
+          "x": 1,
+          "y": 1
+        },
+        {
+          "label": "雾港码头",
+          "entityId": "location-2",
+          "x": 3,
+          "y": 3
+        },
+        {
+          "label": "白岬灯塔",
+          "entityId": "location-3",
+          "x": 5,
+          "y": 4
+        },
+        {
+          "label": "灯室入口",
+          "entityId": "location-4",
+          "x": 7,
+          "y": 5
+        },
+        {
+          "label": "潮下船坞",
+          "entityId": "location-5",
+          "x": 9,
+          "y": 6
+        }
+      ],
+      "customTiles": [],
+      "createdAt": "@day:-8T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    }
+  ],
+  "recipes": [
+    {
+      "id": "recipe-0",
+      "projectId": "lightward",
+      "outputItemId": "item-5",
+      "outputQty": 1,
+      "ingredients": [
+        {
+          "itemId": "item-1",
+          "qty": 2
+        },
+        {
+          "itemId": "item-2",
+          "qty": 1
+        }
+      ],
+      "tools": [
+        "item-9"
+      ],
+      "note": "细砂熔融后在冷镜座中退火。",
+      "createdAt": "@day:-4T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "recipe-1",
+      "projectId": "lightward",
+      "outputItemId": "item-6",
+      "outputQty": 1,
+      "ingredients": [
+        {
+          "itemId": "item-2",
+          "qty": 2
+        },
+        {
+          "itemId": "item-3",
+          "qty": 1
+        }
+      ],
+      "tools": [
+        "item-9"
+      ],
+      "note": "校准指针后封蜡。",
+      "createdAt": "@day:-4T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "recipe-2",
+      "projectId": "lightward",
+      "outputItemId": "item-7",
+      "outputQty": 1,
+      "ingredients": [
+        {
+          "itemId": "item-3",
+          "qty": 2
+        },
+        {
+          "itemId": "item-4",
+          "qty": 1
+        },
+        {
+          "itemId": "item-5",
+          "qty": 1
+        }
+      ],
+      "tools": [
+        "item-9"
+      ],
+      "note": "装好反光罩再注入灯油。",
+      "createdAt": "@day:-4T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "recipe-3",
+      "projectId": "lightward",
+      "outputItemId": "item-8",
+      "outputQty": 1,
+      "ingredients": [
+        {
+          "itemId": "item-4",
+          "qty": 2
+        },
+        {
+          "itemId": "item-1",
+          "qty": 1
+        },
+        {
+          "itemId": "item-7",
+          "qty": 1
+        }
+      ],
+      "tools": [
+        "item-9"
+      ],
+      "note": "用耐潮船材固定扣件。",
+      "createdAt": "@day:-4T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    }
+  ],
+  "aiMessages": [],
+  "aiProposals": []
+}

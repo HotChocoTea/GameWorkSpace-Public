@@ -1,0 +1,10 @@
+{
+  "identifier": "main-window",
+  "description": "Workspace window event subscription",
+  "windows": [
+    "main"
+  ],
+  "permissions": [
+    "core:default"
+  ]
+}
