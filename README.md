@@ -68,3 +68,7 @@ cargo build --release --workspace --features mino-studio/custom-protocol
 ```
 
 开发模式使用 `npm run tauri dev`。发布构建产出 `target/release/gameworkspace.exe` 和 `target/release/gameworkspace-mcp.exe`。端到端测试使用临时数据库，覆盖真实 stdio 子进程、HTTP、200 次 WAL 并发写入与读取，以及一万个条目的 FTS5 和中文短词检索。
+
+## 参考视频
+
+本项目的制作参考了[这期哔哩哔哩视频](https://www.bilibili.com/video/BV1gHsz6ZE5H)。
