@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Clapperboard, Sparkles } from 'lucide-react'
 import { api } from '../../api/client'
 import { EntityLinkPanel } from '../../components/EntityLinkPanel'
 import { historyKey, useCommands, useKeys } from '../../components/CanvasKit'
@@ -7,9 +8,7 @@ import { useWorkspace } from '../../state/workspace'
 import type { Entity } from '../../types'
 import {
   Add,
-  EntryField,
-  Heading,
-  MultiPick,
+  TrashEntry,
   Reference,
   SaveStatus,
   SearchField,
@@ -28,7 +27,7 @@ function Scene({ scene }: { scene: Entity }) {
   const w = useWorkspace(),
     ed = useEditor(scene),
     e = ed.e
-  const [mode, setMode] = useState(modes[0]),
+  const [mode, setMode] = useState('对话预览'),
     [index, setIndex] = useState(0)
   const stage = useRef<HTMLDivElement>(null),
     lineFocus = useRef('')
@@ -49,6 +48,7 @@ function Scene({ scene }: { scene: Entity }) {
       text: scalar(l.text),
     }
   })
+  const firstSpeaker = lines.find((l) => l.speakerId !== 'narrator')?.speakerId
   const cast = Array.isArray(e.data?.castIds)
     ? strings(e.data?.castIds)
     : [...new Set(lines.map((l) => l.speakerId).filter((id) => byId.has(id)))]
@@ -73,6 +73,11 @@ function Scene({ scene }: { scene: Entity }) {
     if (mode !== '播放') return
     stage.current?.focus()
     function key(ev: KeyboardEvent) {
+      if (
+        document.querySelector('dialog[open]') ||
+        !stage.current?.contains(document.activeElement)
+      )
+        return
       if (
         [' ', 'Enter', 'ArrowRight', 'ArrowLeft', 'Escape'].includes(ev.key)
       ) {
@@ -123,8 +128,98 @@ function Scene({ scene }: { scene: Entity }) {
   }
   return (
     <>
-      <main className="scene-work stack">
-        <div className="split">
+      <section className="scene-meta stack" aria-label="场景信息">
+        <header className="split">
+          {ed.status === '已自动保存' ? (
+            <small>修改会自动保存</small>
+          ) : (
+            <SaveStatus editor={ed} />
+          )}
+          <button
+            className="ai-fill"
+            onClick={() =>
+              w.assistant(
+                '根据场景目的与现有角色补全当前场景资料和对白。',
+                e.id,
+              )
+            }
+          >
+            <Sparkles size={14} /> AI 填写
+          </button>
+        </header>
+        <input
+          className="scene-title"
+          aria-label="场景标题"
+          value={e.title}
+          onChange={(ev) => ed.edit({ title: ev.target.value })}
+        />
+        <div className="scene-fields">
+          <Reference
+            editor={ed}
+            label="地点"
+            name="locationId"
+            type="location"
+          />
+          <Reference
+            editor={ed}
+            label="所属任务线"
+            name="questId"
+            type="quest"
+          />
+        </div>
+        <fieldset className="scene-cast">
+          <legend>出场角色</legend>
+          {characters.map((c) => (
+            <span key={c.id}>
+              <button
+                aria-pressed={cast.includes(c.id)}
+                onClick={() =>
+                  ed.data(
+                    'castIds',
+                    cast.includes(c.id)
+                      ? cast.filter((id) => id !== c.id)
+                      : [...cast, c.id],
+                  )
+                }
+              >
+                {c.title}
+              </button>
+              {cast.includes(c.id) && (
+                <button
+                  className="cast-open"
+                  title={'打开' + c.title}
+                  onClick={() => w.openEntity(c)}
+                >
+                  ↗
+                </button>
+              )}
+            </span>
+          ))}
+        </fieldset>
+        <label className="field">
+          <span>这场戏的目的</span>
+          <textarea
+            rows={3}
+            value={e.summary}
+            onChange={(ev) => ed.edit({ summary: ev.target.value })}
+          />
+        </label>
+        <EntityLinkPanel entity={e} />
+        {quest && (
+          <button className="text-action" onClick={() => w.openEntity(quest)}>
+            {quest.title} ↗
+          </button>
+        )}
+        {pins.map((pin, i) => (
+          <p key={i}>图钉 · {pin}</p>
+        ))}
+        <div className="scene-meta-foot">
+          <TrashEntry editor={ed} />
+        </div>
+      </section>
+      <section className="scene-work stack" aria-label="场景对白">
+        <div className="split scene-mode">
+          <strong>对白 {lines.length} 句</strong>
           <div className="segments">
             {modes.map((m) => (
               <button
@@ -139,19 +234,27 @@ function Scene({ scene }: { scene: Entity }) {
               </button>
             ))}
           </div>
-          <div className="world-actions">
-            {mode === '编写' && (
-              <>
-                <button disabled={!history.canUndo} onClick={history.undo}>
-                  撤销
-                </button>
-                <button disabled={!history.canRedo} onClick={history.redo}>
-                  重做
-                </button>
-              </>
-            )}
-            <SaveStatus editor={ed} />
-          </div>
+        </div>
+        <div className="world-actions">
+          {mode === '编写' && (
+            <>
+              <button disabled={!history.canUndo} onClick={history.undo}>
+                撤销
+              </button>
+              <button disabled={!history.canRedo} onClick={history.redo}>
+                重做
+              </button>
+            </>
+          )}
+          {mode === '编写' && (
+            <button
+              onClick={() =>
+                w.assistant('按现有出场角色与语气续写当前场景对白。', e.id)
+              }
+            >
+              AI 续写
+            </button>
+          )}
         </div>
         {mode === '编写' ? (
           <>
@@ -241,7 +344,7 @@ function Scene({ scene }: { scene: Entity }) {
           </>
         ) : mode === '对话预览' ? (
           <div className="scene-chat">
-            {lines.map((l, i) => {
+            {lines.map((l) => {
               if (l.speakerId === 'narrator')
                 return (
                   <p className="scene-narrator" key={l.id}>
@@ -249,15 +352,14 @@ function Scene({ scene }: { scene: Entity }) {
                   </p>
                 )
               const c = byId.get(l.speakerId),
-                avatar = c && value(c, 'avatarAsset'),
-                role = c && value(c, 'role')
+                avatar = c && value(c, 'avatarAsset')
               return (
                 <article
                   key={l.id}
-                  className={'chat-line ' + (i % 2 ? 'reverse' : '')}
-                  style={{
-                    borderColor: role === '主角' ? '#3b9292' : '#926fb3',
-                  }}
+                  className={
+                    'chat-line ' +
+                    (l.speakerId === firstSpeaker ? 'reverse' : '')
+                  }
                 >
                   <b className="chat-avatar">
                     {avatar ? (
@@ -297,7 +399,7 @@ function Scene({ scene }: { scene: Entity }) {
                 alt={speaker.title}
               />
             )}
-            <section className="vn-dialog">
+            <section className="vn-dialog" key={current?.id}>
               <small>
                 {location?.title} · {current ? safeIndex + 1 : 0} /{' '}
                 {lines.length}
@@ -324,46 +426,7 @@ function Scene({ scene }: { scene: Entity }) {
             </section>
           </div>
         )}
-      </main>
-      <aside className="world-sidebar stack">
-        <h3>场景信息</h3>
-        <EntryField editor={ed} name="title" label="标题" />
-        <Reference
-          editor={ed}
-          label="发生地点"
-          name="locationId"
-          type="location"
-        />
-        <Reference editor={ed} label="所属任务" name="questId" type="quest" />
-        <MultiPick
-          label="出场角色"
-          rows={characters}
-          ids={cast}
-          change={(ids) => ed.data('castIds', ids)}
-        />
-        <EntryField editor={ed} name="summary" label="场景目的" />
-        <details>
-          <summary>关联与引用</summary>
-          {quest && (
-            <button onClick={() => w.openEntity(quest)}>{quest.title}</button>
-          )}
-          {pins.map((pin, i) => (
-            <p key={i}>图钉 · {pin}</p>
-          ))}
-          <EntityLinkPanel entity={e} />
-        </details>
-        <button
-          onClick={() =>
-            void w.run(async () => {
-              await ed.flush()
-              await w.trash(e.id)
-              w.close()
-            })
-          }
-        >
-          删除场景
-        </button>
-      </aside>
+      </section>
     </>
   )
 }
@@ -373,30 +436,16 @@ export default function ScenesView() {
   const rows = w.entities.filter((e) => e.entityType === 'scene'),
     active = rows.find((e) => e.id === w.selected) ?? rows[0]
   return (
-    <section className="world">
-      <Heading title="场景对白">
-        <button
-          className="secondary"
-          onClick={() =>
-            w.assistant('按现有出场角色与语气续写当前场景对白。', active?.id)
-          }
-        >
-          AI 续写
-        </button>
-        <Add
-          label="新建场景"
-          click={() =>
-            void w.run(async () => {
-              const e = newEntity(w.project.id, 'scene', '新场景')
-              await w.save({ ...e, data: { lines: [], castIds: [] } })
-              w.inspect(e.id)
-            })
-          }
-        />
-      </Heading>
-      <div className="scene-layout">
-        <aside className="world-sidebar stack">
-          <SearchField label="搜索场景" query={query} set={setQuery} />
+    <section className="world scene-layout">
+      <aside className="scene-list stack">
+        <h1>
+          <i>
+            <Clapperboard size={18} />
+          </i>
+          场景对白 <small>{rows.length}</small>
+        </h1>
+        <SearchField label="搜索场景" query={query} set={setQuery} />
+        <div className="scene-entries">
           {rows
             .filter((e) => matches(e, query))
             .map((e) => (
@@ -408,16 +457,25 @@ export default function ScenesView() {
                 onClick={() => w.inspect(e.id)}
               >
                 <strong>{e.title}</strong>
-                <small>{e.summary}</small>
               </button>
             ))}
-        </aside>
-        {active ? (
-          <Scene key={active.id} scene={active} />
-        ) : (
-          <p>新建场景以编写第一句对白。</p>
-        )}
-      </div>
+        </div>
+        <Add
+          label="新建场景"
+          click={() =>
+            void w.run(async () => {
+              const e = newEntity(w.project.id, 'scene', '新场景')
+              await w.save({ ...e, data: { lines: [], castIds: [] } })
+              w.inspect(e.id)
+            })
+          }
+        />
+      </aside>
+      {active ? (
+        <Scene key={active.id} scene={active} />
+      ) : (
+        <p>新建场景以编写第一句对白。</p>
+      )}
     </section>
   )
 }

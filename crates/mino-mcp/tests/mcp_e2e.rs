@@ -151,7 +151,7 @@ fn stdio_agent_and_desktop_round_trip() {
         assert_eq!(r["protocolVersion"], version);
         assert_eq!(
             r["serverInfo"],
-            json!({"name":"gameworkspace-mcp","version":"0.1.0"})
+            json!({"name":"gameworkspace-mcp","version":env!("CARGO_PKG_VERSION")})
         );
     }
     c.send(&json!({"jsonrpc":"2.0","method":"notifications/initialized"}).to_string());

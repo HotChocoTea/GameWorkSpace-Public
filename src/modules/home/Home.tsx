@@ -1,131 +1,43 @@
 import { useState } from 'react'
 import {
   Plus,
-  Import,
-  ArrowUpRight,
+  Upload,
   MoreHorizontal,
-  FolderOpen,
-  ListChecks,
-  Clock3,
-  LibraryBig,
-  FlagTriangleRight,
+  ArrowRight,
+  LockKeyhole,
   SlidersHorizontal,
   Copy,
   Trash2,
-  ArrowRight,
-  CheckCheck,
-  CalendarDays,
+  Download,
+  FolderOpen,
+  ArrowDownWideNarrow,
 } from 'lucide-react'
 import { coverUrl } from '../../api/client'
-import { countdown, stampDate } from '../../state/catalog'
-import type { Project, ProjectStats, ActivityLog } from '../../types'
-import { Menu, SectionTitle, Empty } from '../../components/ui'
+import { countdown } from '../../state/catalog'
+import type { Project, ProjectStats } from '../../types'
+import { ProjectLogo } from '../../components/ProjectLogo'
+import { Menu, SectionTitle } from '../../components/ui'
 
-export type CardAction = 'edit' | 'duplicate' | 'delete'
-export interface HomeProps {
+export type CardAction = 'edit' | 'duplicate' | 'export' | 'delete'
+interface HomeProps {
   projects: Project[]
   stats: ProjectStats[]
-  activity: ActivityLog[]
   open: (p: Project) => void
   create: () => void
   importFile: () => void
   action: (a: CardAction, p: Project) => void
 }
-export function Stats({
-  projects,
-  stats,
-}: {
-  projects: number
-  stats: ProjectStats[]
-}) {
-  const total = (key: 'entities' | 'tasks' | 'completed' | 'seconds') =>
-    stats.reduce((sum, s) => sum + s[key], 0)
-  const tiles = [
-    {
-      label: '创作项目',
-      value: projects,
-      unit: '个',
-      icon: FolderOpen,
-      color: 'clay',
-    },
-    {
-      label: '创作条目',
-      value: total('entities'),
-      unit: '条',
-      icon: LibraryBig,
-      color: 'blue',
-    },
-    {
-      label: '已完成任务',
-      value: total('completed'),
-      unit: '/ ' + total('tasks'),
-      icon: ListChecks,
-      color: 'green',
-    },
-    {
-      label: '累计工时',
-      value: Math.round(total('seconds') / 360) / 10,
-      unit: '小时',
-      icon: Clock3,
-      color: 'gold',
-    },
-  ]
-  return (
-    <div className="stats-grid">
-      {tiles.map(({ label, value, unit, icon: Icon, color }) => (
-        <div className="stat" key={label}>
-          <span className={'stat-icon ' + color}>
-            <Icon size={19} />
-          </span>
-          <div>
-            <span className="stat-label">{label}</span>
-            <div className="stat-value">
-              {value}
-              <small>{unit}</small>
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
-  )
-}
-export function ActivityList({
-  rows,
-  projects,
-}: {
-  rows: ActivityLog[]
-  projects: Project[]
-}) {
-  return (
-    <div className="panel activity-panel">
-      <SectionTitle>最近动态</SectionTitle>
-      {rows.length ? (
-        rows.slice(0, 4).map((r) => (
-          <div key={r.id} className="activity-line">
-            <span className="activity-icon">
-              {r.action === 'create' ? (
-                <Plus size={14} />
-              ) : (
-                <CheckCheck size={14} />
-              )}
-            </span>
-            <div>
-              <strong>{r.summary}</strong>
-              <small>{projects.find((p) => p.id === r.projectId)?.name}</small>
-            </div>
-            <time>{stampDate(r.createdAt)}</time>
-          </div>
-        ))
-      ) : (
-        <Empty>还没有项目动态</Empty>
-      )}
-    </div>
-  )
-}
+const actions = [
+  ['open', '打开', FolderOpen],
+  ['edit', '项目设置', SlidersHorizontal],
+  ['duplicate', '复制项目', Copy],
+  ['export', '导出项目', Download],
+  ['delete', '删除项目', Trash2],
+] as const
+
 export default function Home({
   projects,
   stats,
-  activity,
   open,
   create,
   importFile,
@@ -137,173 +49,163 @@ export default function Home({
       ? a.name.localeCompare(b.name, 'zh-CN')
       : b.updatedAt.localeCompare(a.updatedAt),
   )
+  const openTasks = stats.reduce((sum, s) => sum + s.tasks - s.completed, 0)
+  const totalEntities = stats.reduce((sum, s) => sum + s.entities, 0)
   return (
     <div className="page home">
-      <div className="page-heading">
-        <div>
-          <div className="date-line">
-            <CalendarDays size={14} />
-            {new Date().toLocaleDateString('zh-CN', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-              weekday: 'long',
-            })}
-          </div>
-          <h1>GameWorkSpace · 创作工作台</h1>
+      <header className="home-intro">
+        <div className="eyebrow">
+          <i />
+          工作台
         </div>
-        <div className="actions">
-          <button className="secondary" onClick={importFile}>
-            <Import size={16} />
-            导入备份
-          </button>
-          <button className="primary" onClick={create}>
-            <Plus size={17} />
-            新建项目
-          </button>
-        </div>
+        <h1>开始你的创作</h1>
+        <p className="home-summary">
+          <span>
+            <b>{projects.length}</b> 个项目
+          </span>{' '}
+          ·{' '}
+          <span>
+            <b>{openTasks}</b> 个待办任务
+          </span>{' '}
+          ·{' '}
+          <span>
+            <b>{totalEntities}</b> 条设计内容
+          </span>
+        </p>
+      </header>
+      <div className="start-card">
+        <button onClick={create}>
+          <i>
+            <Plus size={23} />
+          </i>
+          <span>
+            <strong>新建项目</strong>
+            <small>起个名字就能开始，其余的之后再补</small>
+          </span>
+          <ArrowRight size={16} />
+        </button>
+        <button onClick={importFile}>
+          <i>
+            <Upload size={19} />
+          </i>
+          <span>
+            <strong>导入备份</strong>
+            <small>从导出的 .gws.json / .mino.json 备份文件恢复项目</small>
+          </span>
+          <ArrowRight size={16} />
+        </button>
       </div>
-      <Stats projects={projects.length} stats={stats} />
-      <div className="home-content">
-        <section className="project-collection">
-          <div className="section-head">
-            <SectionTitle count={projects.length}>我的项目</SectionTitle>
-            <select
-              aria-label="项目排序"
-              className="sort"
-              value={sort}
-              onChange={(e) => setSort(e.target.value)}
-            >
-              <option value="updated">最近更新</option>
-              <option value="name">名称排序</option>
-            </select>
-          </div>
-          <div className="projects">
-            {list.map((p) => {
-              const s = stats.find((s) => s.projectId === p.id),
-                percent = s?.tasks
-                  ? Math.round((s.completed / s.tasks) * 100)
-                  : 0
-              return (
-                <article className="project-card" key={p.id}>
-                  <button
-                    className="project-art"
-                    onClick={() => open(p)}
-                    aria-label={'打开 ' + p.name}
-                  >
-                    <img src={coverUrl(p)} alt={'项目封面 · ' + p.name} />
-                    <span className="art-enter">
-                      <ArrowUpRight size={18} />
-                    </span>
-                  </button>
-                  <div className="card-content">
-                    <div className="card-meta">
-                      <span className="engine">
-                        <i />
-                        {p.engine || '自定义引擎'}
-                      </span>
-                      <Menu
-                        label={p.name + '的操作'}
-                        trigger={<MoreHorizontal size={19} />}
-                      >
-                        {(close) => (
-                          <>
-                            {(
-                              [
-                                ['edit', '项目设置', SlidersHorizontal],
-                                ['duplicate', '复制项目', Copy],
-                                ['delete', '删除项目', Trash2],
-                              ] as const
-                            ).map(([key, label, Icon]) => (
-                              <button
-                                key={key}
-                                className={
-                                  key === 'delete' ? 'danger-text' : ''
-                                }
-                                onClick={() => {
-                                  close()
-                                  action(key, p)
-                                }}
-                              >
-                                <Icon size={15} />
-                                {label}
-                              </button>
-                            ))}
-                          </>
-                        )}
-                      </Menu>
-                    </div>
-                    <button className="project-name" onClick={() => open(p)}>
-                      {p.name}
+      <section className="project-collection">
+        <header className="section-head">
+          <SectionTitle count={projects.length}>我的项目</SectionTitle>
+          {list.length > 1 && (
+            <Menu label="项目排序" trigger={<ArrowDownWideNarrow size={16} />}>
+              {(close) => (
+                <>
+                  {[
+                    ['updated', '最近更新'],
+                    ['name', '名称排序'],
+                  ].map(([id, label]) => (
+                    <button
+                      key={id}
+                      aria-pressed={id === sort}
+                      onClick={() => {
+                        setSort(id)
+                        close()
+                      }}
+                    >
+                      {label}
                     </button>
-                    <p className="pitch">{p.pitch || '尚未填写项目简介'}</p>
-                    <div className="chips">
-                      {[...p.genres, ...p.platforms].slice(0, 4).map((g) => (
-                        <span key={g}>{g}</span>
-                      ))}
-                    </div>
-                    <div className="progress-label">
-                      <span>任务进度</span>
-                      <b>{percent}%</b>
-                    </div>
-                    <progress value={percent} max={100} aria-label="任务进度" />
-                    <div className="card-foot">
-                      <span>
-                        <FlagTriangleRight size={14} />
-                        {s?.dueDate ? countdown(s.dueDate) : '尚无里程碑'}
-                      </span>
-                      <button className="text-action" onClick={() => open(p)}>
-                        进入项目
-                        <ArrowRight size={15} />
-                      </button>
-                    </div>
-                  </div>
-                </article>
-              )
-            })}
-            {!list.length && (
-              <button className="empty-project" onClick={create}>
-                <Plus /> 创建第一个项目
-              </button>
-            )}
-          </div>
-        </section>
-        <div className="overview-grid">
-          <div className="panel">
-            <SectionTitle>即将到来的里程碑</SectionTitle>
-            {stats.filter((s) => s.dueDate).length ? (
-              stats
-                .filter((s) => s.dueDate)
-                .sort((a, b) => a.dueDate!.localeCompare(b.dueDate!))
-                .slice(0, 4)
-                .map((s) => (
-                  <button
-                    key={s.projectId}
-                    className="milestone-line"
-                    onClick={() =>
-                      open(projects.find((p) => p.id === s.projectId)!)
-                    }
-                  >
-                    <span className="date-tile">
-                      <small>{Number(s.dueDate!.slice(5, 7))} 月</small>
-                      <b>{s.dueDate!.slice(-2)}</b>
-                    </span>
-                    <span>
-                      <strong>{s.milestone}</strong>
-                      <small>
-                        {projects.find((p) => p.id === s.projectId)?.name}
-                      </small>
-                    </span>
-                    <span className="days">{countdown(s.dueDate!)}</span>
+                  ))}
+                </>
+              )}
+            </Menu>
+          )}
+        </header>
+        <div className="projects">
+          {list.map((p) => {
+            const s = stats.find((s) => s.projectId === p.id)
+            const percent = s?.tasks
+              ? Math.round((100 * s.completed) / s.tasks)
+              : 0
+            const milestone = [s?.milestone, s?.dueDate && countdown(s.dueDate)]
+              .filter(Boolean)
+              .join(' · ')
+            return (
+              <article className="project-card" key={p.id}>
+                <button
+                  className="project-art"
+                  aria-label={'打开 ' + p.name}
+                  onClick={() => open(p)}
+                >
+                  <img src={coverUrl(p)} alt="" />
+                </button>
+                <div className="card-content">
+                  <ProjectLogo project={p} />
+                  <button className="project-name" onClick={() => open(p)}>
+                    {p.name}
                   </button>
-                ))
-            ) : (
-              <Empty>还没有安排里程碑</Empty>
-            )}
-          </div>
-          <ActivityList rows={activity} projects={projects} />
+                  <div className="chips">
+                    {[...new Set([...p.genres, p.engine].filter(Boolean))].map(
+                      (tag) => (
+                        <span key={tag}>{tag}</span>
+                      ),
+                    )}
+                  </div>
+                  <p className="pitch">{p.pitch || '尚未填写项目简介'}</p>
+                  <div className="project-progress">
+                    <progress value={percent} max={100} aria-label="任务进度" />
+                    <small>{percent}%</small>
+                  </div>
+                  <footer className="card-foot">
+                    <span title={milestone}>
+                      <b>{(s?.tasks ?? 0) - (s?.completed ?? 0)}</b> 个待办 ·{' '}
+                      {milestone || '尚无里程碑'}
+                    </span>
+                    <Menu
+                      label={p.name + ' · 更多'}
+                      trigger={<MoreHorizontal size={16} />}
+                    >
+                      {(close) => (
+                        <>
+                          {actions.map(([key, label, Icon]) => (
+                            <button
+                              key={key}
+                              className={key === 'delete' ? 'danger-text' : ''}
+                              onClick={() => {
+                                close()
+                                if (key === 'open') open(p)
+                                else action(key, p)
+                              }}
+                            >
+                              <Icon size={14} />
+                              {label}
+                            </button>
+                          ))}
+                        </>
+                      )}
+                    </Menu>
+                  </footer>
+                </div>
+              </article>
+            )
+          })}
+          {!list.length && (
+            <button className="empty-project" onClick={create}>
+              <Plus size={17} />
+              创建第一个项目
+            </button>
+          )}
         </div>
-      </div>
+      </section>
+      <footer className="privacy">
+        <LockKeyhole size={14} />
+        <span>
+          项目保存在本地 SQLite 数据库中，绝不上传至任何服务器；API Key 经
+          Windows DPAPI 加密，支持定期导出备份并通过 MCP 与外部 AI Agent
+          实时联动。
+        </span>
+      </footer>
     </div>
   )
 }

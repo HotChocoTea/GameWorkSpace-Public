@@ -491,6 +491,7 @@ pub fn export_agent_bundle_zip(db: &Database, id: &str) -> Result<Vec<u8>> {
     }
     for name in presets {
         let bytes: &[u8] = match name {
+            "lighthouse-v2" => include_bytes!("../../../public/covers/lighthouse-v2.jpg"),
             "lighthouse" => include_bytes!("../../../public/covers/lighthouse.jpg"),
             "castle" => include_bytes!("../../../public/covers/castle.jpg"),
             "city" => include_bytes!("../../../public/covers/city.jpg"),

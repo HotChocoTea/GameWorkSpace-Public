@@ -195,7 +195,7 @@
 }
 .ai-compose [role='alert'],
 .smart-import [role='alert'] {
-  color: var(--accent-ink);
+  color: var(--accent);
   overflow-wrap: anywhere;
 }
 @media (max-width: 850px) {

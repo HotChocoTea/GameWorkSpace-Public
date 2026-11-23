@@ -241,7 +241,7 @@ pub fn call(db: &Database, name: &str, a: &Value) -> Result<Value> {
         "create_project" => {
             let mut row: Project = serde_json::from_value(a.clone())?;
             row.id = id();
-            row.cover_preset = "lighthouse".into();
+            row.cover_preset = "lighthouse-v2".into();
             if !a["engine"].is_string() {
                 row.engine = "Unity".into();
             }

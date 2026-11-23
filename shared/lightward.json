@@ -13,7 +13,7 @@
       "Steam Deck"
     ],
     "logoAsset": null,
-    "coverPreset": "lighthouse",
+    "coverPreset": "lighthouse-v2",
     "coverAsset": null,
     "enabledModules": [
       "overview",

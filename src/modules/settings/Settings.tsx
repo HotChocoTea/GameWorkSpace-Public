@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from 'react'
+import { lazy, Suspense, useState, type MouseEvent } from 'react'
 import {
   Palette,
   Keyboard,
@@ -45,7 +45,10 @@ export function Settings({
   initialTab,
 }: {
   prefs: Preferences
-  update: (patch: Partial<Preferences>) => void
+  update: (
+    patch: Partial<Preferences>,
+    event?: MouseEvent<HTMLButtonElement>,
+  ) => void
   stats: ProjectStats[]
   onClose: () => void
   bin: () => void
@@ -76,7 +79,7 @@ export function Settings({
             </button>
           ))}
         </nav>
-        <div className="settings-pane">
+        <div className="settings-pane" key={tab}>
           <h3>{tab}</h3>
           {tab === '外观' && (
             <>
@@ -107,7 +110,7 @@ export function Settings({
                       key={b}
                       className={prefs.brightness === b ? 'selected' : ''}
                       aria-pressed={prefs.brightness === b}
-                      onClick={() => update({ brightness: b })}
+                      onClick={(event) => update({ brightness: b }, event)}
                     >
                       {['跟随系统', '浅色', '深色'][i]}
                     </button>

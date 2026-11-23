@@ -1,0 +1,290 @@
+:root {
+  --ease: cubic-bezier(0.22, 0.8, 0.24, 1);
+  --spring: cubic-bezier(0.34, 1.45, 0.5, 1);
+  --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-quart: cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes gws-view-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes gws-modal-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.975);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes gws-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes gws-ring {
+  from {
+    stroke-dashoffset: 100;
+  }
+}
+@keyframes gws-bar {
+  from {
+    transform: scaleY(0);
+  }
+}
+@keyframes gws-slide {
+  from {
+    opacity: 0;
+    transform: translateX(var(--slide-from, 20px));
+  }
+}
+@keyframes gws-toast {
+  from {
+    transform: translateY(14px);
+    opacity: 0;
+  }
+}
+@keyframes gws-theme-reveal {
+  from {
+    clip-path: circle(0 at var(--vt-x) var(--vt-y));
+  }
+  to {
+    clip-path: circle(var(--vt-radius) at var(--vt-x) var(--vt-y));
+  }
+}
+@keyframes gws-pulse {
+  50% {
+    opacity: 0.4;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+  ::view-transition-new(root) {
+    animation: gws-theme-reveal 650ms cubic-bezier(0.45, 0.05, 0.25, 1) both;
+  }
+  .nav-ind[data-glide='true'] {
+    transition:
+      transform 0.38s var(--ease),
+      height 0.2s;
+  }
+  .home,
+  .project-canvas,
+  .overview-body,
+  .settings-pane,
+  .scene-chat,
+  .scene-lines,
+  .world-heading
+    ~ :is(
+      .world-columns,
+      .world-board,
+      .world-timeline,
+      .world-grid,
+      .visual-editor
+    ),
+  .ai-message,
+  .proposal {
+    animation: gws-view-enter 220ms var(--ease-spring);
+  }
+  .project-card,
+  .world-card,
+  .kpis > *,
+  .bento-column > .panel,
+  .art-gallery > button {
+    --stagger: 0;
+    animation: gws-view-enter 280ms var(--ease-spring) backwards;
+    animation-delay: calc(var(--stagger) * 35ms);
+  }
+  :is(.projects, .world-grid, .kpis, .bento-column, .art-gallery)
+    > :nth-child(2) {
+    --stagger: 1;
+  }
+  :is(.projects, .world-grid, .kpis, .bento-column, .art-gallery)
+    > :nth-child(3) {
+    --stagger: 2;
+  }
+  :is(.projects, .world-grid, .kpis, .bento-column, .art-gallery)
+    > :nth-child(4) {
+    --stagger: 3;
+  }
+  :is(.projects, .world-grid, .kpis, .bento-column, .art-gallery)
+    > :nth-child(5) {
+    --stagger: 4;
+  }
+  :is(.projects, .world-grid, .kpis, .bento-column, .art-gallery)
+    > :nth-child(6) {
+    --stagger: 5;
+  }
+  :is(.projects, .world-grid, .kpis, .bento-column, .art-gallery)
+    > :nth-child(7) {
+    --stagger: 6;
+  }
+  :is(.projects, .world-grid, .kpis, .bento-column, .art-gallery)
+    > :nth-child(n + 8) {
+    --stagger: 7;
+  }
+  .bento-column:nth-child(2) > .panel {
+    animation-delay: calc((var(--stagger) + 2) * 35ms);
+  }
+  .ring-arc {
+    animation: gws-ring 700ms var(--ease-spring);
+    transition: stroke-dashoffset 700ms var(--ease-spring);
+  }
+  progress::-webkit-progress-value {
+    transition: width 500ms var(--ease-spring);
+  }
+  .bar-chart rect {
+    transform-box: fill-box;
+    transform-origin: center bottom;
+    animation: gws-bar 420ms var(--ease-spring) backwards;
+  }
+  .heatmap button {
+    transition: transform 160ms var(--ease-spring);
+  }
+  .heatmap button:is(:hover, :focus-visible) {
+    transform: scale(1.25);
+  }
+  .heatmap button span {
+    transition: opacity 150ms;
+  }
+  .project-sidebar {
+    transition: width 240ms var(--ease-spring);
+  }
+  .side-inner {
+    transition: opacity 240ms var(--ease-spring);
+  }
+  [data-collapsed='true'] .side-inner {
+    opacity: 0;
+  }
+  .ai-slot {
+    transition:
+      width 260ms var(--ease-spring),
+      visibility 0s 260ms;
+  }
+  .ai-slot[data-open='true'] {
+    transition-delay: 0s;
+  }
+  .ai-slot .ai-panel {
+    transform: translateX(-100%);
+    opacity: 0;
+    transition:
+      transform 260ms var(--ease-spring),
+      opacity 220ms;
+  }
+  .ai-slot[data-open='true'] .ai-panel {
+    transform: none;
+    opacity: 1;
+  }
+  @starting-style {
+    .ai-slot[data-open='true'] .ai-panel {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+  }
+  .timer-pill {
+    animation: gws-view-enter 180ms var(--ease-spring);
+  }
+  .timer-dot,
+  .stream-pulse {
+    animation: gws-pulse 1.4s ease-in-out infinite;
+  }
+  .modal[open] {
+    animation: gws-modal-enter 240ms cubic-bezier(0.2, 0.9, 0.3, 1.1);
+  }
+  .modal::backdrop {
+    animation: gws-fade 220ms var(--ease-out-quart);
+  }
+  .inspector,
+  .world-detail,
+  .chat-line,
+  .vn-dialog {
+    animation: gws-slide 220ms var(--ease-spring);
+  }
+  .chat-line {
+    --slide-from: -9px;
+  }
+  .chat-line.reverse {
+    --slide-from: 9px;
+  }
+  .scene-narrator {
+    animation: gws-fade 220ms;
+  }
+  .toast {
+    animation: gws-toast 420ms var(--spring);
+  }
+  .metric,
+  .milestone-ring,
+  .start-card button > svg,
+  .primary,
+  .secondary,
+  .file-button {
+    transition:
+      transform 180ms var(--ease-spring),
+      box-shadow 180ms,
+      background-color 160ms;
+  }
+  .project-card,
+  .world-card {
+    transition:
+      transform 0.4s var(--ease),
+      box-shadow 0.4s var(--ease);
+  }
+  .nav-tile {
+    transition:
+      background-color 160ms,
+      box-shadow 160ms,
+      transform 0.35s var(--spring);
+  }
+  @media (hover: hover) {
+    .ide :is(.project-card, .world-card):hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow), var(--hi);
+    }
+    .metric:is(button):hover,
+    .milestone-ring:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow), var(--hi);
+    }
+    .project-card:hover .project-art img {
+      transform: scale(1.03);
+    }
+    .start-card button:hover > svg {
+      transform: translateX(3px);
+    }
+    .nav-item:hover .nav-tile {
+      transform: scale(1.06) rotate(-4deg);
+    }
+  }
+  :is(
+    .btn,
+    button.primary,
+    .secondary,
+    .file-button,
+    .icon-button,
+    .side-utilities button
+  ):active {
+    transform: scale(0.965);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation: none !important;
+    transition: none !important;
+  }
+  .project-art:hover img {
+    transform: none;
+  }
+}

@@ -46,7 +46,7 @@
 .map-list .active,
 .layer-row.chosen,
 .map-side button[aria-pressed='true'] {
-  color: var(--accent-ink);
+  color: var(--accent);
   background: var(--tint);
   border-color: var(--accent);
 }
@@ -353,7 +353,7 @@
   background: var(--tint);
   border-radius: 7px;
   padding: 12px;
-  color: var(--accent-ink);
+  color: var(--accent);
 }
 @media (max-width: 950px) {
   .scene-layout {
@@ -373,6 +373,60 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* Scene list, metadata, dialogue */
+.project-canvas[data-view='scenes'] { height: 100%; padding: 0; }
+.world.scene-layout {
+  height: 100%; display: grid;
+  grid-template-columns: minmax(145px,.84fr) minmax(214px,1fr) minmax(250px,1.12fr);
+  gap: 0; align-items: stretch;
+}
+.scene-layout > :is(.scene-list,.scene-meta,.scene-work) {
+  min-width: 0; min-height: 0; overflow-y: auto; scrollbar-width: thin;
+  padding: 16px; border: 0; border-radius: 0; gap: 16px;
+}
+.scene-list { background: var(--bg); }
+.scene-layout .scene-meta { background: var(--surface); border-inline: 1px solid var(--line); }
+.scene-layout .scene-work { background: var(--bg); }
+.scene-layout .scene-list h1 { display: flex; align-items: center; gap: 9px; font-size: 19px; }
+.scene-list h1 i { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: #c45c8a17; color: #ba527f; }
+.scene-list .world-search input { background: var(--surface); border-radius: 10px; }
+.scene-entries { flex: 1; overflow: auto; }
+.scene-entries .world-entry { width: 100%; padding: 10px; min-height: 34px; }
+.scene-entries .world-entry.active { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
+.scene-layout .scene-list .primary { border: 1px dashed var(--line); box-shadow: none; color: var(--muted); background: transparent; }
+.scene-meta header { flex-wrap: wrap; }
+.ai-fill { color: var(--accent); padding: 5px 9px; border: 1px solid color-mix(in srgb,var(--accent) 24%,var(--line)); border-radius: 8px; background: var(--tint); font-size: 12px; }
+.ide .scene-meta input.scene-title { font-size: 23px; font-weight: 700; padding: 2px 0 12px; border: 0; border-radius: 0; border-bottom: 1px solid var(--line); background: transparent; }
+.scene-fields { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px; }
+.scene-fields .world-ref select { width: 100%; }
+.scene-fields .world-ref { position: relative; }
+.scene-fields .world-ref button { font-size: 10px; color: var(--muted); }
+.scene-cast { border: 0; padding: 0; }
+.scene-cast legend,.scene-meta .field > span { color: var(--muted); font-weight: 600; font-size: 12px; }
+.scene-cast button { border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; margin: 7px 5px 0 0; font-size: 12px; }
+.scene-cast button[aria-pressed='true'] { background: var(--tint); color: var(--accent); border-color: color-mix(in srgb,var(--accent) 24%,var(--line)); }
+.scene-meta .links { padding-top: 14px; border-top: 1px solid var(--line); }
+.scene-meta-foot { margin-top: auto; align-self: flex-end; color: var(--muted); }
+.scene-mode { flex-wrap: wrap; font-size: 13px; }
+.scene-mode .segments button { white-space: nowrap; padding: 5px 7px; }
+.scene-work .world-actions:empty { display: none; }
+.scene-chat { align-content: start; padding: 0; gap: 16px; }
+.scene-narrator { background: transparent; font-size: 13px; }
+.chat-line,.chat-line.reverse { max-width: 94%; border: 0; background: none; padding: 0; gap: 7px; }
+.chat-line { justify-self: start; }
+.chat-line strong,.chat-line small { display: inline-block; color: var(--muted); font-size: 11px; font-weight: 500; }
+.chat-line p { margin-top: 4px; padding: 9px 12px; border-radius: 3px 14px 14px 14px; background: var(--chip); border: 1px solid var(--line); text-align: left; box-shadow: var(--shadow); }
+.chat-line.reverse > div { text-align: right; }
+.chat-line.reverse p { color: var(--accent-ink); background: var(--accent-fill); border-color: transparent; border-radius: 14px 3px 14px 14px; }
+.chat-avatar { background: var(--tint); width: 28px; height: 28px; font-size: 12px; line-height: 28px; }
+.scene-mode .segments { max-width: 100%; }
+.scene-meta .field textarea { line-height: 1.6; background: var(--chip); }
+@container (max-width: 635px) {
+  .world.scene-layout { height: auto; min-height: 100%; grid-template-columns: 1fr; }
+  .scene-layout > :is(.scene-list,.scene-meta,.scene-work) { overflow: visible; }
+  .scene-entries { max-height: 140px; }
+}
 @media (max-width: 660px) {
   .scene-layout {
     grid-template-columns: minmax(0, 1fr);
@@ -390,3 +444,10 @@
     height: 380px;
   }
 }
+.scene-cast > span { display: inline-flex; align-items: stretch; position: relative; }
+.scene-cast .cast-open {
+  position: absolute; z-index: 1; left: calc(100% - 7px); top: -3px;
+  border-radius: 50%; padding: 1px 4px; margin: 0; font-size: 10px;
+  opacity: 0; background: var(--surface); pointer-events: none;
+}
+.scene-cast > span:is(:hover,:focus-within) .cast-open { opacity: 1; pointer-events: auto; }

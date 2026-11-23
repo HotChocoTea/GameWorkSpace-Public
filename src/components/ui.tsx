@@ -1,4 +1,11 @@
-import { useEffect, useId, useRef, useState, type ReactNode } from 'react'
+import {
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type ReactNode,
+  type MouseEventHandler,
+} from 'react'
 import { X, ChevronRight, Layers3 } from 'lucide-react'
 
 export function Brand({ compact = false }: { compact?: boolean }) {
@@ -23,7 +30,7 @@ export function IconButton({
 }: {
   label: string
   children: ReactNode
-  onClick: () => void
+  onClick: MouseEventHandler<HTMLButtonElement>
   className?: string
 }) {
   return (

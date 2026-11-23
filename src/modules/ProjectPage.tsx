@@ -1,10 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { api } from '../api/client'
-import { groups, enabled, moduleFor, routes } from '../state/catalog'
+import { enabled, moduleFor } from '../state/catalog'
 import QuestsView from './narrative/QuestsView'
 import ScenesView from './narrative/ScenesView'
 import GraphView from './narrative/GraphView'
-import MapMakerView from './narrative/MapMakerView'
 import ConceptArtView from './world/ConceptArtView'
 import { WorkspaceContext, type Workspace } from '../state/workspace'
 import type { Project, Entity, MapRecord, EntityLink } from '../types'
@@ -24,6 +23,8 @@ import FactionsView from './world/FactionsView'
 import VehiclesView from './world/VehiclesView'
 import InventoryView from './world/InventoryView'
 import CollectiblesView from './world/CollectiblesView'
+
+const MapMakerView = lazy(() => import('./narrative/MapMakerView'))
 
 interface Props extends Omit<
   Workspace,
@@ -47,7 +48,6 @@ export default function ProjectPage(props: Props) {
     inspect,
     navigate,
     notify,
-    times,
   } = props
   const [optimistic, setOptimistic] = useState(new Map<string, Entity>())
   const [maps, setMaps] = useState<MapRecord[]>([]),
@@ -152,19 +152,9 @@ export default function ProjectPage(props: Props) {
   for (const [id, e] of optimistic) merged.set(id, e)
   const items = [...merged.values()],
     entity = selected ? merged.get(selected) : undefined
-  const group = groups.find((g) => g.items.some((m) => m.id === mod)),
-    tabs = group?.items.filter((m) => enabled(p, m.id)) ?? []
   const graph = links.filter(
     (l) => merged.has(l.sourceId) && merged.has(l.targetId),
   )
-  const count = (m: (typeof routes)[number]) =>
-    m.id === 'time'
-      ? times.length
-      : m.id === 'mapmaker'
-        ? maps.length
-        : m.id === 'graph'
-          ? graph.length
-          : items.filter((e) => m.types.includes(e.entityType)).length
   const worldViews: Record<string, React.ReactNode> = {
     art: <ConceptArtView />,
     quests: <QuestsView />,
@@ -181,7 +171,11 @@ export default function ProjectPage(props: Props) {
   const views: Record<string, React.ReactNode> = {
     ...worldViews,
     graph: <GraphView />,
-    mapmaker: <MapMakerView />,
+    mapmaker: (
+      <Suspense fallback={<p className="empty">正在打开地图…</p>}>
+        <MapMakerView />
+      </Suspense>
+    ),
     overview: <OverviewModule />,
     tasks: <TasksView />,
     roadmap: <RoadmapView />,
@@ -204,22 +198,7 @@ export default function ProjectPage(props: Props) {
         openEntity,
       }}
     >
-      {tabs.length > 1 && (
-        <nav className="ribbon" aria-label={group?.name + '模块'}>
-          {tabs.map((m) => (
-            <button
-              className={m.id === mod ? 'active' : ''}
-              key={m.id}
-              onClick={() => navigate(m.id)}
-            >
-              <m.icon size={15} />
-              {m.label}
-              <small>{count(m)}</small>
-            </button>
-          ))}
-        </nav>
-      )}
-      <div className="project-canvas">
+      <div className="project-canvas" key={mod} data-view={mod}>
         {enabled(p, mod) ? (
           views[mod]
         ) : (

@@ -41,7 +41,7 @@ export const groups = [
     items: [entry('overview', '概览', LayoutDashboard)],
   },
   {
-    name: '规划',
+    name: '规划与制作',
     items: [
       entry('tasks', '任务', Columns3, 'task'),
       entry('roadmap', '路线图', Milestone, 'phase', 'milestone'),
@@ -50,7 +50,7 @@ export const groups = [
     ],
   },
   {
-    name: '世界',
+    name: '文档与世界',
     items: [
       entry('docs', '文档', BookOpen, 'doc'),
       entry('lore', '设定集', LibraryBig, 'lore'),
@@ -64,7 +64,7 @@ export const groups = [
     ],
   },
   {
-    name: '叙事',
+    name: '剧情与地图',
     items: [
       entry('quests', '任务线', Route, 'quest'),
       entry('scenes', '场景对白', MessagesSquare, 'scene'),
@@ -73,7 +73,7 @@ export const groups = [
     ],
   },
   {
-    name: '质检',
+    name: '测试与记录',
     items: [
       entry('testing', 'Bug 追踪', Bug, 'bug'),
       entry('devlog', '开发日志', NotebookPen, 'devlog'),
@@ -87,16 +87,17 @@ export const moduleFor = (type: string) =>
 export const enabled = (p: Project, mod: string) =>
   p.enabledModules.includes(mod)
 export const presets: Record<string, string> = {
+  'lighthouse-v2': '星海灯塔',
   lighthouse: '星空灯塔',
   castle: '雾中古堡',
   city: '霓虹之城',
   nebula: '金色星云',
 }
 export const themes = {
-  'studio-slate': '工坊蓝灰',
-  'warm-paper': '暖笺米白',
-  'nebula-glass': '星云玻璃',
-  'deep-sea': '深海极夜',
+  'warm-paper': '暖纸',
+  'liquid-glass': '液态玻璃',
+  'deep-sea': '深海',
+  'ink-white': '墨白',
 }
 export type Theme = keyof typeof themes
 export interface Preferences {
@@ -109,7 +110,7 @@ export interface Preferences {
   shortcuts: { search: string; ai: string }
 }
 export const defaults: Preferences = {
-  theme: 'studio-slate',
+  theme: 'warm-paper',
   brightness: 'system',
   wallpaper: null,
   wallpapers: [],
@@ -126,7 +127,7 @@ export function newProject(name = ''): Project {
     genres: [],
     engine: 'Unity',
     platforms: ['PC'],
-    coverPreset: 'lighthouse',
+    coverPreset: 'lighthouse-v2',
     coverAsset: null,
     logoAsset: null,
     enabledModules: modules.map((m) => m.id),

@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { listen } from '@tauri-apps/api/event'
-import { Sparkles, PanelRightClose, Paperclip, Send } from 'lucide-react'
-import { IconButton } from './ui'
+import { Sparkles, PanelLeftClose, Paperclip, Send } from 'lucide-react'
 import {
   aiHistory,
   native,
@@ -125,6 +124,7 @@ export function AiPanel({
   prompt,
   close,
   settings,
+  shortcut,
   revision,
 }: {
   projectId?: string
@@ -132,6 +132,7 @@ export function AiPanel({
   selected?: string
   prompt?: AssistPrompt
   close: () => void
+  shortcut: string
   settings: () => void
   revision: number
 }) {
@@ -304,20 +305,47 @@ export function AiPanel({
       <header>
         <Sparkles size={17} />
         <h2>AI 助手</h2>
-        <IconButton label="收起 AI 助手" onClick={close}>
-          <PanelRightClose size={16} />
-        </IconButton>
+        <button className="dock-close" onClick={close}>
+          <PanelLeftClose size={15} /> 收起 <kbd>{shortcut}</kbd>
+        </button>
       </header>
       <div className="ai-toolbar">
         <button className="chip" onClick={settings}>
-          {config
-            ? config.name +
-              ' · ' +
-              config.model +
-              ' · ' +
-              tiers[config.reasoningTier]
-            : 'AI API Key 设置'}
+          {config?.name ?? 'AI API Key 设置'}
         </button>
+        {config && (
+          <div className="ai-pickers">
+            <select
+              aria-label="当前会话模型"
+              disabled={sending}
+              value={config.model}
+              onChange={(ev) =>
+                setConfig({ ...config, model: ev.target.value })
+              }
+            >
+              {[...new Set([config.model, ...config.models])].map((model) => (
+                <option key={model}>{model}</option>
+              ))}
+            </select>
+            <select
+              aria-label="当前会话推理深度"
+              disabled={sending}
+              value={config.reasoningTier}
+              onChange={(ev) =>
+                setConfig({
+                  ...config,
+                  reasoningTier: ev.target.value as Provider['reasoningTier'],
+                })
+              }
+            >
+              {Object.entries(tiers).map(([id, label]) => (
+                <option key={id} value={id}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
         {!!messages.length && (
           <button
             disabled={sending || working}
@@ -377,7 +405,10 @@ export function AiPanel({
         ))}
         {sending && (
           <section className="ai-message" aria-live="polite">
-            {stream || '正在生成…'}
+            {stream || '正在生成'}
+            <span className="stream-pulse" aria-hidden="true">
+              •••
+            </span>
           </section>
         )}
         <div ref={tail} />

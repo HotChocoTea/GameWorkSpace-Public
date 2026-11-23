@@ -267,6 +267,7 @@ export function BarChart({
               {labels[i]} · {v} {unit}
             </title>
             <rect
+              style={{ animationDelay: i * 25 + 'ms' }}
               x={x - step * 0.24}
               y={height - h}
               width={step * 0.48}

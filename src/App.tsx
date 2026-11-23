@@ -1,16 +1,15 @@
-import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import {
-  Search,
-  Sparkles,
-  Moon,
-  Sun,
-  Settings2,
-  Trash2,
-  ChevronDown,
-  Timer,
-  Upload,
-  X,
-} from 'lucide-react'
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type MouseEvent,
+} from 'react'
+import { flushSync } from 'react-dom'
+import { Moon, Sun, Settings, PanelLeftOpen, X } from 'lucide-react'
 import { api } from './api/client'
 import {
   defaults,
@@ -20,6 +19,7 @@ import {
   newProject,
   routes,
   shortcutOf,
+  themes,
   type Preferences,
 } from './state/catalog'
 import type {
@@ -42,11 +42,11 @@ import {
 } from './modules/settings/ImportExportModal'
 import type { AssistPrompt } from './components/AiPanel'
 import { RecycleBin } from './components/Records'
-import { Brand, Menu, Empty, IconButton, Modal } from './components/ui'
-import { Settings } from './modules/settings/Settings'
+import { Brand, Empty, IconButton, Modal } from './components/ui'
+import { Settings as SettingsDialog } from './modules/settings/Settings'
 import { ProjectForm, ModulesDialog } from './modules/settings/ProjectForm'
 
-import { clockText, elapsed, stopTimer } from './state/planning'
+import { bugClosed, clockText, elapsed, stopTimer } from './state/planning'
 import { useNow } from './state/workspace'
 
 const AiPanel = lazy(() =>
@@ -65,7 +65,7 @@ function TimerPill({
   const now = useNow()
   return (
     <div className="timer-pill">
-      <Timer size={14} />
+      <i className="timer-dot" />
       <span title={title}>{title}</span>
       <b>{clockText(elapsed(entry, now))}</b>
       <button onClick={stop}>停止</button>
@@ -81,11 +81,11 @@ type Dialog =
         | 'recycle'
         | 'search'
         | 'import'
-        | 'export'
         | 'ai-settings'
         | 'smart-design'
         | 'smart-bugs'
     }
+  | { type: 'export'; projectId?: string }
   | null
 function readRoute() {
   const parts = location.hash.replace(/^#\/?/, '').split('/')
@@ -115,13 +115,17 @@ function readPreferences(raw: Json | undefined): Preferences {
     ...defaults,
     ...stored,
     theme:
-      String(stored.theme) === 'liquid-glass'
-        ? 'nebula-glass'
-        : String(stored.theme) === 'ink-white'
-          ? 'studio-slate'
-          : (stored.theme ?? defaults.theme),
+      String(stored.theme) === 'nebula-glass'
+        ? 'liquid-glass'
+        : stored.theme && Object.hasOwn(themes, stored.theme)
+          ? stored.theme
+          : defaults.theme,
     shortcuts: { ...defaults.shortcuts, ...stored.shortcuts },
   }
+}
+
+function isDark(brightness: Preferences['brightness'], systemDark: boolean) {
+  return brightness === 'dark' || (brightness === 'system' && systemDark)
 }
 
 export default function App() {
@@ -149,6 +153,8 @@ export default function App() {
     [prompt, setPrompt] = useState<AssistPrompt>(),
     [undoIds, setUndoIds] = useState<string[]>([]),
     [ai, setAi] = useState(false),
+    [aiLoaded, setAiLoaded] = useState(false),
+    [collapsed, setCollapsed] = useState(() => window.innerWidth < 760),
     [notice, notify] = useState(''),
     [loadError, setLoadError] = useState('')
   const [prefs, setPrefs] = useState(defaults),
@@ -158,13 +164,16 @@ export default function App() {
   const [systemDark, setSystemDark] = useState(
     () => matchMedia('(prefers-color-scheme: dark)').matches,
   )
-  const dark =
-    prefs.brightness === 'dark' || (prefs.brightness === 'system' && systemDark)
+  const dark = isDark(prefs.brightness, systemDark)
   const p = projects.find((p) => p.id === route.id),
     mod =
       p && enabled(p, route.mod)
         ? route.mod
         : (routes.find((m) => p && enabled(p, m.id))?.id ?? 'overview')
+  const scrollArea = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    scrollArea.current?.scrollTo(0, 0)
+  }, [p?.id, mod])
   const close = () => setDialog(null)
   const bump = useCallback(() => refresh((n) => n + 1), [])
   useEffect(() => {
@@ -179,7 +188,10 @@ export default function App() {
     api
       .subscribe((change) => {
         bump()
-        if (change?.externalMcpCount) notify(`MCP Agent 同步了 ${change.externalMcpCount} 项改动 · 界面已实时刷新`)
+        if (change?.externalMcpCount)
+          notify(
+            `MCP Agent 同步了 ${change.externalMcpCount} 项改动 · 界面已实时刷新`,
+          )
       })
       .then((off) => {
         if (dead) off()
@@ -242,7 +254,7 @@ export default function App() {
       live = false
     }
   }, [revision, route.id])
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = document.documentElement
     el.dataset.theme = prefs.theme
     el.dataset.brightness = dark ? 'dark' : 'light'
@@ -253,10 +265,40 @@ export default function App() {
     const timer = setTimeout(() => notify(''), 5000)
     return () => clearTimeout(timer)
   }, [notice, undoIds])
-  function updatePrefs(patch: Partial<Preferences>) {
-    const value = { ...prefRef.current, ...patch }
+  function updatePrefs(
+    patch: Partial<Preferences>,
+    event?: MouseEvent<HTMLButtonElement>,
+  ) {
+    const previous = prefRef.current
+    const value = { ...previous, ...patch }
     prefRef.current = value
-    setPrefs(value)
+    if (
+      event &&
+      isDark(previous.brightness, systemDark) !==
+        isDark(value.brightness, systemDark) &&
+      typeof document.startViewTransition === 'function' &&
+      matchMedia('(prefers-reduced-motion: no-preference)').matches
+    ) {
+      const rect = event.currentTarget.getBoundingClientRect()
+      const x = event.detail ? event.clientX : rect.left + rect.width / 2
+      const y = event.detail ? event.clientY : rect.top + rect.height / 2
+      const radius = Math.hypot(
+        Math.max(x, innerWidth - x),
+        Math.max(y, innerHeight - y),
+      )
+      const style = document.documentElement.style
+      style.setProperty('--vt-x', x + 'px')
+      style.setProperty('--vt-y', y + 'px')
+      style.setProperty('--vt-radius', Math.ceil(radius) + 'px')
+      // Commit the latest preference before WebView captures the new root.
+      const transition = document.startViewTransition(() => {
+        flushSync(() => setPrefs(prefRef.current))
+      })
+      // A second toggle or a hidden window can skip an in-flight animation.
+      void transition.ready.catch(() => {})
+    } else {
+      setPrefs(value)
+    }
     writes.current++
     queue.current = queue.current
       .then(() => api.saveSetting('appearance', value as unknown as Json))
@@ -282,11 +324,25 @@ export default function App() {
     window.addEventListener('keydown', key)
     return () => window.removeEventListener('keydown', key)
   }, [prefs.shortcuts, p, dialog])
+  useEffect(() => {
+    if (ai) setAiLoaded(true)
+  }, [ai])
+  const toggleBrightness = (event: MouseEvent<HTMLButtonElement>) =>
+    updatePrefs(
+      {
+        brightness: isDark(prefRef.current.brightness, systemDark)
+          ? 'light'
+          : 'dark',
+      },
+      event,
+    )
   function backup() {
     setDialog({ type: 'export' })
   }
   async function act(action: CardAction, project: Project) {
-    if (action === 'duplicate') {
+    if (action === 'export') {
+      setDialog({ type: 'export', projectId: project.id })
+    } else if (action === 'duplicate') {
       try {
         await api.duplicateProject(project.id)
         bump()
@@ -317,207 +373,166 @@ export default function App() {
     }
   }
   return (
-    <div className="studio ide">
-      <header className="command-bar">
-        <button
-          className="hub-button"
-          aria-label="GameWorkSpace 工作台"
-          onClick={home}
-        >
+    <div
+      className={'studio ide ' + (p ? 'project-shell' : 'home-shell')}
+      data-collapsed={collapsed}
+    >
+      {prefs.wallpaper && (
+        <div
+          className="wallpaper"
+          style={{
+            backgroundImage: 'url("' + api.assetUrl(prefs.wallpaper) + '")',
+            filter: 'blur(' + prefs.blur + 'px)',
+            opacity: 1 - prefs.fade / 100,
+          }}
+        />
+      )}
+      {!p && (
+        <header className="home-header">
           <Brand />
-        </button>
-        <Menu
-          label="切换项目"
-          trigger={
-            <>
-              {p?.name ?? '所有项目'}
-              <ChevronDown size={14} />
-            </>
-          }
-        >
-          {(dismiss) => (
-            <>
-              <button
-                onClick={() => {
-                  dismiss()
-                  home()
-                }}
-              >
-                所有项目
-              </button>
-              {projects.map((x) => (
-                <button
-                  key={x.id}
-                  onClick={() => {
-                    dismiss()
-                    go(x)
-                  }}
-                >
-                  {x.name}
-                </button>
-              ))}
-              {p && (
-                <button
-                  onClick={() => {
-                    dismiss()
-                    edit()
-                  }}
-                >
-                  项目设置
-                </button>
-              )}
-              <button
-                onClick={() => {
-                  dismiss()
-                  backup()
-                }}
-              >
-                导出项目
-              </button>
-            </>
-          )}
-        </Menu>
-        <button
-          className="command-search"
-          onClick={() => setDialog({ type: 'search' })}
-        >
-          <Search size={16} />
-          <span>搜索任务、角色、设定、地图或新建条目…</span>
-          <kbd>{prefs.shortcuts.search}</kbd>
-        </button>
-        <div className="command-tools">
-          {p && (
-            <IconButton
-              label="AI 智能导入"
-              onClick={() =>
-                setDialog({
-                  type: mod === 'testing' ? 'smart-bugs' : 'smart-design',
-                })
-              }
-            >
-              <Upload size={17} />
+          <div>
+            <IconButton label="明暗切换" onClick={toggleBrightness}>
+              {dark ? <Sun size={16} /> : <Moon size={16} />}
             </IconButton>
-          )}
-          {active && (
-            <TimerPill
-              entry={active}
-              title={workspace.timerTitle}
-              stop={() => void run(() => stopTimer(active))}
-            />
-          )}
-          <IconButton
-            label="切换浅色或深色"
-            onClick={() => updatePrefs({ brightness: dark ? 'light' : 'dark' })}
-          >
-            {dark ? <Sun size={17} /> : <Moon size={17} />}
-          </IconButton>
-          <button
-            className={'assistant-trigger ' + (ai ? 'selected' : '')}
-            onClick={() => setAi(!ai)}
-          >
-            <Sparkles size={15} />
-            AI 助手 <kbd>{prefs.shortcuts.ai}</kbd>
-          </button>
-          <IconButton
-            label="回收站"
-            onClick={() => setDialog({ type: 'recycle' })}
-          >
-            <Trash2 size={16} />
-          </IconButton>
-          <IconButton label="设置" onClick={settings}>
-            <Settings2 size={16} />
-          </IconButton>
-        </div>
-      </header>
-      <Sidebar project={p} route={mod} open={go} add={add} home={home} />
-      <main className="main">
-        <div className="main-row">
-          <div className="scroll-area">
-            {prefs.wallpaper && (
-              <div
-                className="wallpaper"
-                style={{
-                  backgroundImage:
-                    'url("' + api.assetUrl(prefs.wallpaper) + '")',
-                  filter: 'blur(' + prefs.blur + 'px)',
-                  opacity: 1 - prefs.fade / 100,
-                }}
-              />
-            )}
-            {loadError ? (
-              <div className="page" role="alert">
-                <h1>工作区读取失败</h1>
-                <p>{loadError}</p>
-                <button className="secondary" onClick={bump}>
-                  重试
-                </button>
-              </div>
-            ) : !loaded ? (
-              <Empty>正在打开工作区…</Empty>
-            ) : p ? (
-              workspace.scope === p.id ? (
-                <ProjectPage
-                  key={p.id}
-                  p={p}
-                  mod={mod}
-                  revision={revision}
-                  entities={workspace.entities}
-                  times={workspace.times.filter((t) => t.projectId === p.id)}
-                  active={active}
-                  activity={activity.filter((a) => a.projectId === p.id)}
-                  selected={route.selected}
-                  inspect={(id) => go(p, mod, id)}
-                  close={() => go(p, mod)}
-                  navigate={(m, id) => go(p, m, id)}
-                  refresh={bump}
-                  run={run}
-                  notify={notify}
-                  smartImport={(mode) =>
-                    setDialog({
-                      type: mode === 'bugs' ? 'smart-bugs' : 'smart-design',
-                    })
-                  }
-                  assistant={(value, focusedId) => {
-                    setPrompt({ text: value, focusedId, projectId: p.id })
-                    setAi(true)
-                  }}
-                  modules={add}
-                />
-              ) : (
-                <Empty>正在打开项目…</Empty>
-              )
-            ) : (
-              <Home
-                projects={projects}
-                stats={stats}
-                activity={activity}
-                open={go}
-                action={(a, p) => void act(a, p)}
-                create={() =>
-                  setDialog({ type: 'create', project: newProject() })
-                }
-                importFile={() => setDialog({ type: 'import' })}
-              />
-            )}
+            <button onClick={settings}>
+              <Settings size={15} />
+              设置
+            </button>
           </div>
-          {ai && (
-            <Suspense
-              fallback={<aside className="ai-panel">正在打开 AI 助手…</aside>}
+        </header>
+      )}
+      {p && (
+        <>
+          <Sidebar
+            project={p}
+            projects={projects}
+            route={mod}
+            open={go}
+            add={add}
+            home={home}
+            search={() => setDialog({ type: 'search' })}
+            settings={settings}
+            edit={edit}
+            backup={backup}
+            importFile={() =>
+              setDialog({
+                type: mod === 'testing' ? 'smart-bugs' : 'smart-design',
+              })
+            }
+            recycle={() => setDialog({ type: 'recycle' })}
+            assistant={() => setAi(!ai)}
+            collapsed={collapsed}
+            collapse={() => setCollapsed(true)}
+            brightness={toggleBrightness}
+            dark={dark}
+            shortcuts={prefs.shortcuts}
+            counts={{
+              tasks: workspace.entities.filter(
+                (e) => e.entityType === 'task' && e.status !== '已完成',
+              ).length,
+              testing: workspace.entities.filter(
+                (e) => e.entityType === 'bug' && !bugClosed(e),
+              ).length,
+            }}
+            timer={
+              active && (
+                <TimerPill
+                  entry={active}
+                  title={workspace.timerTitle}
+                  stop={() => void run(() => stopTimer(active))}
+                />
+              )
+            }
+          />
+          {collapsed && (
+            <button
+              className="expand-side"
+              title="展开侧栏"
+              aria-label="展开侧栏"
+              onClick={() => setCollapsed(false)}
             >
-              <AiPanel
-                key={p?.id ?? 'home'}
-                projectId={p?.id}
-                module={mod}
-                selected={route.selected}
+              <PanelLeftOpen size={17} />
+            </button>
+          )}
+        </>
+      )}
+      <div className="ai-slot" data-open={ai} inert={!ai}>
+        {(ai || aiLoaded) && (
+          <Suspense
+            fallback={<aside className="ai-panel">正在打开 AI 助手…</aside>}
+          >
+            <AiPanel
+              key={p?.id ?? 'home'}
+              projectId={p?.id}
+              shortcut={prefs.shortcuts.ai}
+              module={mod}
+              selected={route.selected}
+              revision={revision}
+              prompt={prompt}
+              close={() => {
+                setAi(false)
+                setPrompt(undefined)
+              }}
+              settings={() => setDialog({ type: 'ai-settings' })}
+            />
+          </Suspense>
+        )}
+      </div>
+      <main className="main">
+        <div className="scroll-area" ref={scrollArea}>
+          {loadError ? (
+            <div className="page" role="alert">
+              <h1>工作区读取失败</h1>
+              <p>{loadError}</p>
+              <button className="secondary" onClick={bump}>
+                重试
+              </button>
+            </div>
+          ) : !loaded ? (
+            <Empty>正在打开工作区…</Empty>
+          ) : p ? (
+            workspace.scope === p.id ? (
+              <ProjectPage
+                key={p.id}
+                p={p}
+                mod={mod}
                 revision={revision}
-                prompt={prompt}
-                close={() => {
-                  setAi(false)
-                  setPrompt(undefined)
+                entities={workspace.entities}
+                times={workspace.times.filter((t) => t.projectId === p.id)}
+                active={active}
+                activity={activity.filter((a) => a.projectId === p.id)}
+                selected={route.selected}
+                inspect={(id) => go(p, mod, id)}
+                close={() => go(p, mod)}
+                navigate={(m, id) => go(p, m, id)}
+                refresh={bump}
+                run={run}
+                notify={notify}
+                smartImport={(mode) =>
+                  setDialog({
+                    type: mode === 'bugs' ? 'smart-bugs' : 'smart-design',
+                  })
+                }
+                assistant={(value, focusedId) => {
+                  setPrompt({ text: value, focusedId, projectId: p.id })
+                  setAi(true)
                 }}
-                settings={() => setDialog({ type: 'ai-settings' })}
+                modules={add}
               />
-            </Suspense>
+            ) : (
+              <Empty>正在打开项目…</Empty>
+            )
+          ) : (
+            <Home
+              projects={projects}
+              stats={stats}
+              open={go}
+              action={(a, p) => void act(a, p)}
+              create={() =>
+                setDialog({ type: 'create', project: newProject() })
+              }
+              importFile={() => setDialog({ type: 'import' })}
+            />
           )}
         </div>
       </main>
@@ -564,7 +579,7 @@ export default function App() {
         <ModulesDialog p={dialog.project} onClose={close} onSave={save} />
       )}
       {(dialog?.type === 'settings' || dialog?.type === 'ai-settings') && (
-        <Settings
+        <SettingsDialog
           initialTab={dialog.type === 'ai-settings' ? 'AI API Key' : '外观'}
           restore={() => setDialog({ type: 'import' })}
           smartImport={
@@ -619,7 +634,7 @@ export default function App() {
       {dialog?.type === 'export' && (
         <ExportModal
           projects={projects}
-          initial={p?.id}
+          initial={dialog.projectId ?? p?.id}
           onClose={close}
           done={notify}
         />

@@ -78,7 +78,7 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  color: var(--accent-ink);
+  color: var(--accent);
 }
 .world-sidebar .dropdown {
   left: 0;
@@ -98,7 +98,7 @@
 .world-tree-row.active,
 .world-entry.active {
   background: var(--tint);
-  color: var(--accent-ink);
+  color: var(--accent);
 }
 .world-tree-row:hover,
 .world-entry:hover {
@@ -167,7 +167,7 @@
 .world-row-actions button,
 .world-ref button {
   padding: 4px 7px;
-  color: var(--accent-ink);
+  color: var(--accent);
   border-radius: 4px;
 }
 .world-format button:hover,
@@ -245,7 +245,7 @@
   border-radius: 5px;
 }
 .wiki-link {
-  color: var(--accent-ink);
+  color: var(--accent);
   background: var(--tint);
   border-radius: 4px;
   font-size: 0.95em;
@@ -339,7 +339,7 @@
   height: 24px;
   border-radius: 50%;
   background: var(--tint);
-  color: var(--accent-ink);
+  color: var(--accent);
   overflow: hidden;
   vertical-align: middle;
 }
@@ -377,7 +377,7 @@
   width: 100%;
   background: linear-gradient(125deg, var(--chip), var(--tint));
   overflow: hidden;
-  color: var(--accent-ink);
+  color: var(--accent);
 }
 .world-art > span {
   font-family: Georgia, 'Microsoft YaHei', serif;
@@ -429,7 +429,7 @@
   gap: 16px;
   position: fixed;
   z-index: 7;
-  inset: 52px 0 0 auto;
+  inset: 0 0 0 auto;
   width: min(470px, 93vw);
   padding: 0 19px 24px;
   overflow: auto;
@@ -535,7 +535,7 @@
 }
 .world-best {
   background: var(--tint);
-  color: var(--accent-ink);
+  color: var(--accent);
   font-weight: bold;
 }
 .org-tier {
@@ -576,7 +576,7 @@
   font-size: 22px;
 }
 .world-gap:hover {
-  color: var(--accent-ink);
+  color: var(--accent);
   border-color: var(--accent);
 }
 @media (max-width: 900px) {

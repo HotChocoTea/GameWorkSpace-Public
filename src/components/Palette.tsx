@@ -1,16 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
-import {
-  Search,
-  Plus,
-  CornerDownLeft,
-  ArrowDownUp,
-  FileText,
-} from 'lucide-react'
+import { Search, Plus } from 'lucide-react'
 import { api } from '../api/client'
 import { moduleFor } from '../state/catalog'
 import { Modal, Empty } from './ui'
 import type { Project, SearchResult } from '../types'
 
+const typeLabels: Record<string, string> = {
+  task: '任务',
+  milestone: '里程碑',
+  phase: '阶段',
+  doc: '文档',
+  character: '角色',
+  location: '地点',
+  lore: '设定',
+}
 interface Hit extends SearchResult {
   projectId: string
 }
@@ -81,20 +84,25 @@ export function Palette({
     ...rows.map((r) => ({
       id: r.id,
       title: r.title,
-      label: [
-        moduleFor(r.entityType)?.label,
-        projects.find((p) => p.id === r.projectId)?.name,
+      label:
+        typeLabels[r.entityType] ??
+        moduleFor(r.entityType)?.label ??
+        r.entityType,
+      snippet: [
+        !current && projects.find((p) => p.id === r.projectId)?.name,
+        r.summary,
       ]
         .filter(Boolean)
         .join(' · '),
-      icon: moduleFor(r.entityType)?.icon ?? FileText,
+      kind: r.entityType,
       run: () => open(r),
     })),
     ...actions.map(([kind, name]) => ({
       id: kind,
       title: '新建' + name + (q.trim() ? '「' + q.trim() + '」' : ''),
       label: '快速创建',
-      icon: Plus,
+      snippet: '',
+      kind: 'create',
       run: () => create(kind, q.trim()),
     })),
   ]
@@ -158,21 +166,20 @@ export function Palette({
             onMouseEnter={() => setIdx(i)}
             onClick={() => void run(i)}
           >
-            <o.icon size={17} />
+            {o.kind === 'create' && <Plus size={14} />}
             <span>
-              {o.title}
-              <small>{o.label}</small>
+              <strong>{o.title}</strong>
+              {o.snippet && <small>{o.snippet}</small>}
             </span>
-            <CornerDownLeft size={13} />
+            <b className="type-pill" data-kind={o.kind}>
+              {o.label}
+            </b>
           </button>
         ))}
       </div>
       {error && <p role="alert">{error}</p>}
       <footer className="palette-foot">
-        <ArrowDownUp size={13} />
-        选择
-        <CornerDownLeft size={13} />
-        打开 <kbd>Esc</kbd>关闭
+        <kbd>↑↓</kbd> 选择 <kbd>Enter</kbd> 打开 <kbd>Esc</kbd> 关闭
       </footer>
     </Modal>
   )
