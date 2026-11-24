@@ -48,7 +48,21 @@ export async function preferences() {
     active?: string
     configs?: Record<string, Partial<Provider>>
   } | null
-  const configs = defaults.map((p) => ({ ...p, ...saved?.configs?.[p.id] }))
+  const configs = defaults.map((p) => {
+    const stored = saved?.configs?.[p.id]
+    const models = Array.isArray(stored?.models)
+      ? stored.models.filter((m) => typeof m === 'string' && m.trim())
+      : []
+    return {
+      ...p,
+      ...stored,
+      model:
+        typeof stored?.model === 'string' && stored.model.trim()
+          ? stored.model
+          : p.model,
+      models: [...new Set([...models, ...p.models])],
+    }
+  })
   return {
     configs,
     active: configs.find((p) => p.id === saved?.active) ?? configs[0],
@@ -81,6 +95,7 @@ export async function saveProvider(
         {
           baseUrl: p.baseUrl,
           model: p.model,
+          models: p.models,
           reasoningTier: p.reasoningTier,
           requiresKey: p.requiresKey,
         },
@@ -129,4 +144,24 @@ export function downloadFile(data: BlobPart, filename: string, type: string) {
   a.click()
   a.remove()
   setTimeout(() => URL.revokeObjectURL(url), 30000)
+}
+
+export async function saveExportFile(
+  data: BlobPart | Blob,
+  filename: string,
+  filterLabel: string,
+  extension: string,
+  mime: string,
+): Promise<string | null> {
+  if (!desktop) {
+    downloadFile(data, filename, mime)
+    return filename
+  }
+  const blob = data instanceof Blob ? data : new Blob([data], { type: mime })
+  return native<string | null>('save_export_file', {
+    defaultName: filename,
+    filterLabel,
+    extension,
+    bytes: await fileBytes(blob),
+  })
 }

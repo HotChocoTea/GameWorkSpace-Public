@@ -1,0 +1,29 @@
+[package]
+name = "gws-mcp"
+version = "2.1.0"
+edition = "2021"
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "gameworkspace-mcp"
+path = "src/main.rs"
+
+[dependencies]
+gws-core.workspace = true
+serde_json.workspace = true
+uuid.workspace = true
+chrono.workspace = true
+tokio = { workspace = true, features = ["rt-multi-thread", "macros", "net", "sync", "signal"] }
+hyper = { version = "1", features = ["server", "http1"] }
+hyper-util = { version = "0.1", features = ["tokio"] }
+http-body-util = "0.1"
+base64 = "0.21"
+percent-encoding = "2"
+tempfile = "3"
+
+[dev-dependencies]
+reqwest = { version = "0.12", default-features = false, features = ["json"] }
+rusqlite.workspace = true
+zip = { version = "4", default-features = false, features = ["deflate"] }

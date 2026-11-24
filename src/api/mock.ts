@@ -1,3 +1,4 @@
+import { mentionedTitles } from './impact'
 import fixture from '../../shared/lightward.json'
 import type {
   Snapshot,
@@ -46,7 +47,40 @@ for (const entity of sample.entities) {
   }
 }
 const changes = new EventTarget()
-const changed = () => changes.dispatchEvent(new Event('change'))
+const changed = () => {
+  for (const s of projects.values()) {
+    const rows = s.entities.filter((e) => !e.deletedAt),
+      prior = s.links
+    s.links = prior.filter((l) => l.linkKind !== 'mention')
+    for (const row of rows)
+      for (const title of mentionedTitles(row)) {
+        const target = rows.find((e) => e.title.trim() === title)
+        if (
+          !target ||
+          target.id === row.id ||
+          s.links.some((l) => l.sourceId === row.id && l.targetId === target.id)
+        )
+          continue
+        s.links.push(
+          prior.find(
+            (l) =>
+              l.linkKind === 'mention' &&
+              l.sourceId === row.id &&
+              l.targetId === target.id,
+          ) ?? {
+            id: crypto.randomUUID(),
+            projectId: s.project.id,
+            sourceId: row.id,
+            targetId: target.id,
+            linkKind: 'mention',
+            relationLabel: '提及',
+            createdAt: stamp(),
+          },
+        )
+      }
+  }
+  changes.dispatchEvent(new Event('change'))
+}
 function project(id: string) {
   const s = projects.get(id)
   if (!s) throw Error('项目不存在')

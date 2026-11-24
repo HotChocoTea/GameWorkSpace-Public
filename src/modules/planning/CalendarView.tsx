@@ -3,12 +3,11 @@ import { ChevronLeft, ChevronRight, Plus, Trash2 } from 'lucide-react'
 import { newEntity } from '../../state/catalog'
 import { asDay, dayKey, field, monday, shift } from '../../state/planning'
 import { useWorkspace } from '../../state/workspace'
-import { api } from '../../api/client'
 import { Field } from '../../components/PlanningUI'
 import { Modal } from '../../components/ui'
 import type { Entity } from '../../types'
 export default function CalendarView() {
-  const { project, entities, inspect, save, run } = useWorkspace(),
+  const { project, entities, inspect, save, run, trash } = useWorkspace(),
     today = dayKey()
   const [selected, select] = useState(today),
     [month, setMonth] = useState(asDay(today.slice(0, 7) + '-01'))
@@ -139,7 +138,7 @@ export default function CalendarView() {
               {e.entityType === 'calendar_event' && (
                 <button
                   aria-label={'删除 ' + e.title}
-                  onClick={() => void run(() => api.deleteEntity(e.id))}
+                  onClick={() => void run(() => trash(e.id))}
                 >
                   <Trash2 size={14} />
                 </button>

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { LockKeyhole } from 'lucide-react'
 import { EntityLinkPanel } from '../../components/EntityLinkPanel'
 import { Empty } from '../../components/ui'
+import { ImpactButton } from '../../components/ImpactModal'
 import { useWorkspace } from '../../state/workspace'
 import { withData } from '../../state/planning'
 import type { Entity } from '../../types'
@@ -73,6 +74,7 @@ function LoreEntry({ entity }: { entity: Entity }) {
     >
       <div className="split">
         <Photo editor={ed} name="coverAsset" label="词条封面" />
+        <ImpactButton id={ed.e.id} />
         <SaveStatus editor={ed} />
         <TrashEntry editor={ed} />
       </div>

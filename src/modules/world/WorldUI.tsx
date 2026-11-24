@@ -1,3 +1,4 @@
+import { MentionEditor } from '../../components/MentionEditor'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import {
   ChevronDown,
@@ -12,6 +13,7 @@ import { api } from '../../api/client'
 import { EntityLinkPanel } from '../../components/EntityLinkPanel'
 import { Field } from '../../components/PlanningUI'
 import { IconButton } from '../../components/ui'
+import { ImpactButton } from '../../components/ImpactModal'
 import { useWorkspace } from '../../state/workspace'
 import type { Entity, Json } from '../../types'
 import {
@@ -153,11 +155,7 @@ export function TextField({
   return (
     <Field label={label}>
       {multiline ? (
-        <textarea
-          rows={3}
-          value={current}
-          onChange={(ev) => change(ev.target.value)}
-        />
+        <MentionEditor rows={3} value={current} onValue={change} />
       ) : (
         <input
           type={type}
@@ -535,6 +533,7 @@ export function Detail({
     >
       <header className="split">
         <h2>{label}</h2>
+        <ImpactButton id={ed.e.id} />
         <SaveStatus editor={ed} />
         <TrashEntry editor={ed} />
         <IconButton label="关闭详情" onClick={close}>

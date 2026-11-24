@@ -93,6 +93,11 @@ export default function OverviewModule() {
     done = tasks.filter((t) => t.status === '已完成'),
     bugs = entities.filter((e) => e.entityType === 'bug'),
     openBugs = bugs.filter((b) => !bugClosed(b))
+  const placeholders = entities.filter(
+    (e) =>
+      e.entityType === 'asset_item' &&
+      (e.data?.stage ?? e.status) === '灰盒占位',
+  )
   const statusLabels = new Map(
     columns(project, tasks).map((c) => [c.id, c.label]),
   )
@@ -271,6 +276,18 @@ export default function OverviewModule() {
         </div>
       </div>
       <div className="overview-body stack" key={String(analytics)}>
+        {placeholders.length > 0 && (
+          <button
+            className="chip placeholder-pill"
+            onClick={() =>
+              project.enabledModules.includes('assets_pipeline')
+                ? navigate('assets_pipeline', placeholders[0].id)
+                : inspect(placeholders[0].id)
+            }
+          >
+            灰盒占位资源 · {placeholders.length} <ArrowRight size={14} />
+          </button>
+        )}
         {!analytics && (
           <div className="overview-lead">
             <button

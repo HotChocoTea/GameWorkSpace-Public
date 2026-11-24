@@ -2,11 +2,11 @@ import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { api } from '../api/client'
 import { enabled, moduleFor } from '../state/catalog'
 import QuestsView from './narrative/QuestsView'
-import ScenesView from './narrative/ScenesView'
 import GraphView from './narrative/GraphView'
 import ConceptArtView from './world/ConceptArtView'
 import { WorkspaceContext, type Workspace } from '../state/workspace'
 import type { Project, Entity, MapRecord, EntityLink } from '../types'
+import { ImpactModal, useImpactReview } from '../components/ImpactModal'
 import { EntityInspector } from '../components/EntityInspector'
 import OverviewModule from './overview/OverviewModule'
 import TasksView from './planning/TasksView'
@@ -24,11 +24,22 @@ import VehiclesView from './world/VehiclesView'
 import InventoryView from './world/InventoryView'
 import CollectiblesView from './world/CollectiblesView'
 
+const AssetPipelineView = lazy(() => import('./planning/AssetPipelineView'))
+const ScenesView = lazy(() => import('./narrative/ScenesView'))
+const BalanceView = lazy(() => import('./world/BalanceView'))
+const LocalizationView = lazy(() => import('./world/LocalizationView'))
 const MapMakerView = lazy(() => import('./narrative/MapMakerView'))
 
 interface Props extends Omit<
   Workspace,
-  'project' | 'save' | 'saveMany' | 'trash' | 'links' | 'maps' | 'openEntity'
+  | 'project'
+  | 'save'
+  | 'saveMany'
+  | 'trash'
+  | 'impact'
+  | 'links'
+  | 'maps'
+  | 'openEntity'
 > {
   p: Project
   mod: string
@@ -52,6 +63,7 @@ export default function ProjectPage(props: Props) {
   const [optimistic, setOptimistic] = useState(new Map<string, Entity>())
   const [maps, setMaps] = useState<MapRecord[]>([]),
     [links, setLinks] = useState<EntityLink[]>([])
+  const radar = useImpactReview(p.id)
   const queue = useRef(Promise.resolve())
   const writing = useRef(new Map<string, Entity>())
   useEffect(() => {
@@ -90,6 +102,10 @@ export default function ProjectPage(props: Props) {
     restore: string[] = [],
     removed: string[] = [],
   ) {
+    for (const id of removed) {
+      await queue.current
+      if (!(await radar.inspect(id, true))) throw Error('已取消删除')
+    }
     const updated = items.map((item) => ({
       ...item,
       updatedAt: new Date().toISOString(),
@@ -133,6 +149,8 @@ export default function ProjectPage(props: Props) {
   }
   const save = (item: Entity) => saveMany([item])
   async function trash(id: string) {
+    await queue.current
+    if (!(await radar.inspect(id, true))) throw Error('已取消删除')
     const op = queue.current.then(() => api.deleteEntity(id))
     queue.current = op.catch(() => {})
     await op
@@ -156,9 +174,28 @@ export default function ProjectPage(props: Props) {
     (l) => merged.has(l.sourceId) && merged.has(l.targetId),
   )
   const worldViews: Record<string, React.ReactNode> = {
+    balance: (
+      <Suspense fallback={<p className="empty">正在打开数值平衡…</p>}>
+        <BalanceView />
+      </Suspense>
+    ),
+    localization: (
+      <Suspense fallback={<p className="empty">正在打开本地化…</p>}>
+        <LocalizationView />
+      </Suspense>
+    ),
+    assets_pipeline: (
+      <Suspense fallback={<p className="empty">正在打开资产管线…</p>}>
+        <AssetPipelineView />
+      </Suspense>
+    ),
     art: <ConceptArtView />,
     quests: <QuestsView />,
-    scenes: <ScenesView />,
+    scenes: (
+      <Suspense fallback={<p className="empty">正在打开场景对白…</p>}>
+        <ScenesView />
+      </Suspense>
+    ),
     docs: <DocsView />,
     lore: <LoreView />,
     characters: <CharactersView />,
@@ -193,6 +230,7 @@ export default function ProjectPage(props: Props) {
         save,
         saveMany,
         trash,
+        impact: radar.inspect,
         links: graph,
         maps,
         openEntity,
@@ -207,6 +245,9 @@ export default function ProjectPage(props: Props) {
           </button>
         )}
       </div>
+      {radar.review && (
+        <ImpactModal review={radar.review} finish={radar.finish} />
+      )}
       {entity &&
         !(
           (mod === 'devlog' || mod in worldViews) &&

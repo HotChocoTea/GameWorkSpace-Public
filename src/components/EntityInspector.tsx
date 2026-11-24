@@ -1,3 +1,6 @@
+import { MentionEditor } from './MentionEditor'
+import { ImpactButton } from './ImpactModal'
+import { Markdown } from './Markdown'
 import { useEffect, useRef, useState } from 'react'
 import { Trash2, X, ListPlus } from 'lucide-react'
 import type { Entity, Json } from '../types'
@@ -34,7 +37,7 @@ export function EntityInspector({
   entity: Entity
   close: () => void
 }) {
-  const { project, entities, save, run, notify } = useWorkspace()
+  const { project, entities, save, run, notify, trash } = useWorkspace()
   const [row, set] = useState(entity),
     [busy, setBusy] = useState(false),
     [converted, setConverted] = useState(false)
@@ -174,6 +177,7 @@ export function EntityInspector({
     >
       <header className="inspector-head">
         <span>{moduleFor(kind)?.label} / 条目详情</span>
+        <ImpactButton id={row.id} />
         <button aria-label="关闭详情" onClick={close}>
           <X size={19} />
         </button>
@@ -198,7 +202,7 @@ export function EntityInspector({
               className="danger-text"
               onClick={() =>
                 void run(async () => {
-                  await api.deleteEntity(row.id)
+                  await trash(row.id)
                   close()
                 })
               }
@@ -342,12 +346,13 @@ export function EntityInspector({
                 />
               </Field>
               <Field label="描述">
-                <textarea
+                <MentionEditor
                   rows={3}
                   value={row.body}
-                  onChange={(e) => update({ ...row, body: e.target.value })}
+                  onValue={(body) => update({ ...row, body })}
                 />
               </Field>
+              {task && row.body.includes('[[') && <Markdown body={row.body} />}
               {(task || bug) && (
                 <ImagesField
                   names={assets(task ? 'images' : 'screenshots')}

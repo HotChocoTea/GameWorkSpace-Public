@@ -31,6 +31,7 @@ interface SidebarProps {
   home: () => void
   add: () => void
   edit: () => void
+  sync: () => void
   backup: () => void
   importFile: () => void
   search: () => void
@@ -165,6 +166,10 @@ export function Sidebar(props: SidebarProps) {
                   <button onClick={choose(props.edit)}>
                     <Settings size={15} />
                     项目设置
+                  </button>
+                  <button onClick={choose(props.sync)}>
+                    <FolderOpen size={15} />
+                    引擎数据同步
                   </button>
                   <button onClick={choose(props.backup)}>
                     <Download size={15} />

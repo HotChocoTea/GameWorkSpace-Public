@@ -1,4 +1,4 @@
-use mino_core::{assets::AssetInfo, *};
+use gws_core::{assets::AssetInfo, *};
 use std::sync::Arc;
 use tauri::{
     ipc::{InvokeBody, Request},
@@ -8,9 +8,141 @@ use tauri::{
 type Db<'a> = State<'a, Arc<Database>>;
 type Reply<T> = std::result::Result<T, String>;
 
+#[tauri::command]
+pub async fn evaluate_balance_curve(
+    expression: String,
+    min_level: i32,
+    max_level: i32,
+    vars: balance::Variables,
+) -> Reply<Vec<balance::CurvePoint>> {
+    blocking(move || balance::evaluate_curve(&expression, min_level, max_level, &vars)).await
+}
+#[tauri::command]
+pub async fn simulate_drop_table(
+    entries: Vec<balance::QuantityDropEntry>,
+    rolls: u32,
+    seed: Option<u64>,
+) -> Reply<balance::DropSimulation> {
+    let seed = seed.unwrap_or_else(|| {
+        std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap_or_default()
+            .as_nanos() as u64
+    });
+    blocking(move || balance::simulate_quantity_drop_table(&entries, rolls, seed)).await
+}
+#[tauri::command]
+pub async fn extract_project_localization(
+    db: Db<'_>,
+    project_id: String,
+) -> Reply<localization::Extraction> {
+    let db = db.inner().clone();
+    blocking(move || localization::extract_project_localization(&db, &project_id)).await
+}
+#[tauri::command]
+pub async fn ai_translate_localization(
+    db: Db<'_>,
+    project_id: String,
+    entry_ids: Vec<String>,
+    target_locale: String,
+    provider_id: String,
+    model: String,
+    reasoning_tier: ai::ReasoningTier,
+) -> Reply<localization::TranslationReport> {
+    localization::ai_translate_localization(
+        &db,
+        &project_id,
+        &entry_ids,
+        &target_locale,
+        &provider_id,
+        &model,
+        reasoning_tier,
+    )
+    .await
+    .map_err(err)
+}
+#[tauri::command]
+pub fn save_locale_translation(
+    db: Db<'_>,
+    project_id: String,
+    id: String,
+    locale: String,
+    text: String,
+) -> Reply<()> {
+    localization::save_locale_translation(&db, &project_id, &id, &locale, &text).map_err(err)
+}
+
+#[tauri::command]
+pub fn active_data_dir(db: Db<'_>) -> String {
+    db.data_dir().display().to_string()
+}
+#[tauri::command]
+pub async fn migrate_data_dir(
+    db: Db<'_>,
+    target_dir: std::path::PathBuf,
+) -> Reply<integrations::MigrationStatus> {
+    let source = db.data_dir().to_owned();
+    blocking(move || integrations::migrate_data_dir(&source, &target_dir)).await
+}
+#[tauri::command]
+pub fn open_data_dir_in_explorer(dir: std::path::PathBuf) -> Reply<()> {
+    if !dir.is_absolute() || !dir.is_dir() {
+        return Err("目录不存在".into());
+    }
+    let path = std::path::absolute(dir).map_err(|e| e.to_string())?;
+    #[cfg(windows)]
+    let app = "explorer.exe";
+    #[cfg(target_os = "macos")]
+    let app = "open";
+    #[cfg(all(unix, not(target_os = "macos")))]
+    let app = "xdg-open";
+    std::process::Command::new(app)
+        .arg(path)
+        .spawn()
+        .map(|_| ())
+        .map_err(|e| e.to_string())
+}
+#[tauri::command]
+pub async fn create_snapshot(
+    db: Db<'_>,
+    project_id: Option<String>,
+    label: String,
+) -> Reply<snapshots::SnapshotInfo> {
+    let db = db.inner().clone();
+    blocking(move || snapshots::create_snapshot(&db, project_id.as_deref(), &label)).await
+}
+#[tauri::command]
+pub async fn list_snapshots(db: Db<'_>) -> Reply<Vec<snapshots::SnapshotInfo>> {
+    let path = db.data_dir().to_owned();
+    blocking(move || snapshots::list_snapshots(&path)).await
+}
+#[tauri::command]
+pub async fn restore_snapshot(db: Db<'_>, filename: String) -> Reply<Vec<Project>> {
+    let db = db.inner().clone();
+    blocking(move || snapshots::restore_snapshot(&db, &filename)).await
+}
+#[tauri::command]
+pub async fn analyze_entity_impact(
+    db: Db<'_>,
+    project_id: String,
+    entity_id: String,
+) -> Reply<impact::ImpactReport> {
+    let db = db.inner().clone();
+    blocking(move || impact::analyze_entity_impact(&db, &project_id, &entity_id)).await
+}
+#[tauri::command]
+pub async fn sync_project_to_engine(
+    db: Db<'_>,
+    project_id: String,
+    config: engine_sync::EngineConfig,
+) -> Reply<engine_sync::EngineSyncResult> {
+    let db = db.inner().clone();
+    blocking(move || engine_sync::sync_project_to_engine(&db, &project_id, &config)).await
+}
+
 #[derive(Default)]
 pub struct McpService {
-    server: tokio::sync::Mutex<Option<mino_mcp::HttpServer>>,
+    server: tokio::sync::Mutex<Option<gws_mcp::HttpServer>>,
 }
 
 #[tauri::command]
@@ -39,7 +171,7 @@ pub async fn get_mcp_status(
         serde_json::json!({"binaryPath":binary,"binaryExists":binary.is_file(),"dataDir":db.data_dir(),
         "dbPath":db.data_dir().join(DATABASE_NAME),"httpRunning":addr.is_some(),"httpPort":addr.map(|a|a.port()).unwrap_or(47890),
         "httpUrl":addr.map(|a|format!("http://{a}/mcp")),"recentChanges":db.list_recent_changes(Some("mcp"),50).map_err(|e|e.to_string())?,
-        "directory":mino_mcp::directory()}),
+        "directory":gws_mcp::directory()}),
     )
 }
 #[tauri::command]
@@ -56,7 +188,7 @@ pub async fn start_mcp_http(port: u16, db: Db<'_>, service: State<'_, McpService
         };
     }
     *server = Some(
-        mino_mcp::start_http_server(&db, ([127, 0, 0, 1], port).into(), None)
+        gws_mcp::start_http_server(&db, ([127, 0, 0, 1], port).into(), None)
             .await
             .map_err(|e| e.to_string())?,
     );
@@ -72,7 +204,7 @@ pub async fn stop_mcp_http(service: State<'_, McpService>) -> Reply<()> {
 }
 #[tauri::command]
 pub async fn test_mcp_self_check(db: Db<'_>) -> Reply<serde_json::Value> {
-    mino_mcp::McpHandler::new(&db)
+    gws_mcp::McpHandler::new(&db)
         .and_then(|h| h.self_check())
         .map_err(|e| e.to_string())
 }
@@ -231,6 +363,35 @@ pub fn save_map(db: Db<'_>, record: MapRecord) -> Reply<()> {
 }
 
 #[tauri::command]
+pub async fn save_export_file(
+    default_name: String,
+    filter_label: String,
+    extension: String,
+    bytes: Vec<u8>,
+) -> Reply<Option<String>> {
+    blocking(move || {
+        let path = crate::save_dialog::pick_save_path(&default_name, &filter_label, &extension)
+            .map_err(Error::Invalid)?;
+        let Some(path) = path else { return Ok(None) };
+        engine_sync::write_export_file(&path, &bytes)?;
+        Ok(Some(path.display().to_string()))
+    })
+    .await
+}
+
+#[tauri::command]
+pub async fn export_map_tiled_file(record: MapRecord) -> Reply<Option<String>> {
+    blocking(move || {
+        let path = crate::save_dialog::pick_save_path(&record.name, "Tiled 地图", "tmj")
+            .map_err(Error::Invalid)?;
+        let Some(path) = path else { return Ok(None) };
+        engine_sync::write_map_tiled(&record, &path)?;
+        Ok(Some(path.display().to_string()))
+    })
+    .await
+}
+
+#[tauri::command]
 pub fn delete_map(db: Db<'_>, id: String) -> Reply<()> {
     db.delete_map(&id).map_err(|e| e.to_string())
 }
@@ -254,7 +415,7 @@ pub fn delete_recipe(db: Db<'_>, id: String) -> Reply<()> {
 pub fn save_asset(db: Db<'_>, request: Request<'_>) -> Reply<AssetInfo> {
     let ext = request
         .headers()
-        .get("x-mino-extension")
+        .get("x-gws-extension")
         .and_then(|h| h.to_str().ok())
         .ok_or("缺少文件类型")?;
     let InvokeBody::Raw(bytes) = request.body() else {
@@ -312,6 +473,10 @@ pub async fn test_ai_connection(
     Ok(db.test_connection(&config).await)
 }
 #[tauri::command]
+pub async fn fetch_ai_models(db: Db<'_>, config: ai::AiProviderConfig) -> Reply<Vec<String>> {
+    db.fetch_models(&config).await.map_err(err)
+}
+#[tauri::command]
 pub async fn ai_chat_send(
     app: tauri::AppHandle,
     db: Db<'_>,
@@ -319,9 +484,16 @@ pub async fn ai_chat_send(
     request_id: String,
 ) -> Reply<AiMessage> {
     use tauri::Emitter;
-    db.ai_chat_send(&input,|delta|{
-        if input.mode==ai::Mode::Ask {let _=app.emit("gws://ai-stream",serde_json::json!({"projectId":input.project_id,"requestId":request_id,"delta":delta}));}
-    }).await.map_err(err)
+    db.ai_chat_send(&input, |delta| {
+        if input.is_ask_only() {
+            let _ = app.emit(
+                "gws://ai-stream",
+                serde_json::json!({"projectId": input.project_id, "requestId": request_id, "delta": delta}),
+            );
+        }
+    })
+    .await
+    .map_err(err)
 }
 #[tauri::command]
 pub async fn ai_assist_action(
@@ -361,11 +533,11 @@ pub fn rollback_ai_proposal(db: Db<'_>, proposal_id: String) -> Reply<()> {
     db.rollback_ai_proposal(&proposal_id).map_err(err)
 }
 
-fn err(e: mino_core::Error) -> String {
+fn err(e: gws_core::Error) -> String {
     e.to_string()
 }
 async fn blocking<T: Send + 'static>(
-    work: impl FnOnce() -> mino_core::Result<T> + Send + 'static,
+    work: impl FnOnce() -> gws_core::Result<T> + Send + 'static,
 ) -> Reply<T> {
     tauri::async_runtime::spawn_blocking(work)
         .await

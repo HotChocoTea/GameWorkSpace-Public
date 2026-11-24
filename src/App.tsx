@@ -43,6 +43,7 @@ import {
 import type { AssistPrompt } from './components/AiPanel'
 import { RecycleBin } from './components/Records'
 import { Brand, Empty, IconButton, Modal } from './components/ui'
+const EngineSyncModal = lazy(() => import('./modules/settings/EngineSyncModal'))
 import { Settings as SettingsDialog } from './modules/settings/Settings'
 import { ProjectForm, ModulesDialog } from './modules/settings/ProjectForm'
 
@@ -85,6 +86,7 @@ type Dialog =
         | 'smart-design'
         | 'smart-bugs'
     }
+  | { type: 'engine-sync'; projectId: string }
   | { type: 'export'; projectId?: string }
   | null
 function readRoute() {
@@ -188,7 +190,8 @@ export default function App() {
     api
       .subscribe((change) => {
         bump()
-        if (change?.externalMcpCount)
+        if (change?.syncErrors?.length) notify(change.syncErrors.join('\n'))
+        else if (change?.externalMcpCount)
           notify(
             `MCP Agent 同步了 ${change.externalMcpCount} 项改动 · 界面已实时刷新`,
           )
@@ -413,6 +416,7 @@ export default function App() {
             search={() => setDialog({ type: 'search' })}
             settings={settings}
             edit={edit}
+            sync={() => setDialog({ type: 'engine-sync', projectId: p.id })}
             backup={backup}
             importFile={() =>
               setDialog({
@@ -467,7 +471,12 @@ export default function App() {
               shortcut={prefs.shortcuts.ai}
               module={mod}
               selected={route.selected}
+              entities={workspace.scope === p?.id ? workspace.entities : []}
               revision={revision}
+              navigate={(targetMod, targetId) => {
+                if (p) go(p, targetMod, targetId)
+              }}
+              onWorkspaceChanged={bump}
               prompt={prompt}
               close={() => {
                 setAi(false)
@@ -506,6 +515,7 @@ export default function App() {
                 close={() => go(p, mod)}
                 navigate={(m, id) => go(p, m, id)}
                 refresh={bump}
+                aiSettings={() => setDialog({ type: 'ai-settings' })}
                 run={run}
                 notify={notify}
                 smartImport={(mode) =>
@@ -631,10 +641,16 @@ export default function App() {
           }}
         />
       )}
+      {dialog?.type === 'engine-sync' && (
+        <Suspense fallback={null}>
+          <EngineSyncModal projectId={dialog.projectId} onClose={close} />
+        </Suspense>
+      )}
       {dialog?.type === 'export' && (
         <ExportModal
           projects={projects}
           initial={dialog.projectId ?? p?.id}
+          sync={(projectId) => setDialog({ type: 'engine-sync', projectId })}
           onClose={close}
           done={notify}
         />

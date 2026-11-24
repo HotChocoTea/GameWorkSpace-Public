@@ -1,4 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { MentionEditor } from '../../components/MentionEditor'
+import { BranchEditor, BranchPreview, Playtest } from './DialogueBranch'
+import { readChoices, type Line } from './dialogue'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { Clapperboard, Sparkles } from 'lucide-react'
 import { api } from '../../api/client'
 import { EntityLinkPanel } from '../../components/EntityLinkPanel'
@@ -27,22 +30,26 @@ function Scene({ scene }: { scene: Entity }) {
   const w = useWorkspace(),
     ed = useEditor(scene),
     e = ed.e
-  const [mode, setMode] = useState('对话预览'),
-    [index, setIndex] = useState(0)
-  const stage = useRef<HTMLDivElement>(null),
-    lineFocus = useRef('')
+  const [mode, setMode] = useState('对话预览')
+  const lineFocus = useRef('')
   const characters = w.entities.filter((e) => e.entityType === 'character'),
     byId = new Map(w.entities.map((e) => [e.id, e]))
-  const lines = list(e.data?.lines ?? e.data?.dialogues).map((v, i) => {
+  const lines: Line[] = list(e.data?.lines ?? e.data?.dialogues).map((v, i) => {
     const l = record(v),
-      speakerId = scalar(l.speakerId) || 'narrator'
+      speakerId = scalar(
+        l.speakerId,
+        l.speakerName && l.speakerName !== '旁白' ? '' : 'narrator',
+      )
     return {
       ...l,
+      condition: scalar(l.condition),
+      nextLineId: scalar(l.nextLineId),
+      choices: readChoices(l.choices),
       id: scalar(l.id, 'line-' + i),
       speakerId,
       speakerName:
         speakerId === 'narrator'
-          ? '旁白'
+          ? scalar(l.speakerName, '旁白')
           : (byId.get(speakerId)?.title ?? scalar(l.speakerName, '未知角色')),
       mood: scalar(l.mood),
       text: scalar(l.text),
@@ -63,33 +70,6 @@ function Scene({ scene }: { scene: Entity }) {
       .filter((p) => p.entityId === e.id)
       .map((p) => m.name + ' · ' + scalar(p.label)),
   )
-  const safeIndex = Math.min(index, Math.max(0, lines.length - 1)),
-    current = lines[safeIndex],
-    speaker = current && byId.get(current.speakerId)
-  function next(delta: number) {
-    setIndex((i) => Math.max(0, Math.min(lines.length - 1, i + delta)))
-  }
-  useEffect(() => {
-    if (mode !== '播放') return
-    stage.current?.focus()
-    function key(ev: KeyboardEvent) {
-      if (
-        document.querySelector('dialog[open]') ||
-        !stage.current?.contains(document.activeElement)
-      )
-        return
-      if (
-        [' ', 'Enter', 'ArrowRight', 'ArrowLeft', 'Escape'].includes(ev.key)
-      ) {
-        ev.preventDefault()
-        ev.stopPropagation()
-        if (ev.key === 'Escape') setMode('编写')
-        else next(ev.key === 'ArrowLeft' ? -1 : 1)
-      }
-    }
-    window.addEventListener('keydown', key, true)
-    return () => window.removeEventListener('keydown', key, true)
-  }, [mode, lines.length])
   useEffect(() => {
     if (lineFocus.current) {
       document.getElementById(lineFocus.current)?.focus()
@@ -115,6 +95,9 @@ function Scene({ scene }: { scene: Entity }) {
       id,
       speakerId: prev?.speakerId ?? 'narrator',
       speakerName: prev?.speakerName ?? '旁白',
+      condition: '',
+      nextLineId: '',
+      choices: [],
       mood: '',
       text: '',
     })
@@ -227,7 +210,6 @@ function Scene({ scene }: { scene: Entity }) {
                 className={mode === m ? 'active' : ''}
                 onClick={() => {
                   setMode(m)
-                  if (m === '播放') setIndex(0)
                 }}
               >
                 {m}
@@ -312,17 +294,30 @@ function Scene({ scene }: { scene: Entity }) {
                       <button
                         aria-label="删除台词"
                         onClick={() =>
-                          changeLines(lines.filter((_, j) => j !== i))
+                          changeLines(
+                            lines
+                              .filter((_, j) => j !== i)
+                              .map((row) => ({
+                                ...row,
+                                nextLineId:
+                                  row.nextLineId === l.id ? '' : row.nextLineId,
+                                choices: row.choices.map((c) =>
+                                  c.nextLineId === l.id
+                                    ? { ...c, nextLineId: '' }
+                                    : c,
+                                ),
+                              })),
+                          )
                         }
                       >
                         ×
                       </button>
                     </div>
-                    <textarea
+                    <MentionEditor
                       id={l.id}
                       aria-label={'台词 ' + (i + 1)}
                       value={l.text}
-                      onChange={(ev) => change({ text: ev.target.value })}
+                      onValue={(text) => change({ text })}
                       onKeyDown={(ev) => {
                         if (
                           ev.key === 'Enter' &&
@@ -334,6 +329,7 @@ function Scene({ scene }: { scene: Entity }) {
                         }
                       }}
                     />
+                    <BranchEditor line={l} lines={lines} change={change} />
                   </article>
                 )
               })}
@@ -345,86 +341,49 @@ function Scene({ scene }: { scene: Entity }) {
         ) : mode === '对话预览' ? (
           <div className="scene-chat">
             {lines.map((l) => {
-              if (l.speakerId === 'narrator')
-                return (
-                  <p className="scene-narrator" key={l.id}>
-                    {l.text}
-                  </p>
-                )
               const c = byId.get(l.speakerId),
                 avatar = c && value(c, 'avatarAsset')
               return (
-                <article
-                  key={l.id}
-                  className={
-                    'chat-line ' +
-                    (l.speakerId === firstSpeaker ? 'reverse' : '')
-                  }
-                >
-                  <b className="chat-avatar">
-                    {avatar ? (
-                      <img src={api.assetUrl(avatar)} alt="" />
-                    ) : (
-                      l.speakerName.slice(0, 1)
-                    )}
-                  </b>
-                  <div>
-                    <strong>{l.speakerName}</strong> <small>{l.mood}</small>
-                    <p>{l.text}</p>
-                  </div>
-                </article>
+                <Fragment key={l.id}>
+                  {l.condition && (
+                    <small className="line-condition">
+                      条件 · {l.condition}
+                    </small>
+                  )}
+                  {l.speakerId === 'narrator' ? (
+                    <p className="scene-narrator">{l.text}</p>
+                  ) : (
+                    <article
+                      className={
+                        'chat-line ' +
+                        (l.speakerId === firstSpeaker ? 'reverse' : '')
+                      }
+                    >
+                      <b className="chat-avatar">
+                        {avatar ? (
+                          <img src={api.assetUrl(avatar)} alt="" />
+                        ) : (
+                          l.speakerName.slice(0, 1)
+                        )}
+                      </b>
+                      <div>
+                        <strong>{l.speakerName}</strong> <small>{l.mood}</small>
+                        <p>{l.text}</p>
+                      </div>
+                    </article>
+                  )}
+                  <BranchPreview line={l} lines={lines} />
+                </Fragment>
               )
             })}
           </div>
         ) : (
-          <div
-            ref={stage}
-            className="vn-stage"
-            tabIndex={-1}
-            style={
-              location && value(location, 'coverAsset')
-                ? {
-                    backgroundImage:
-                      'linear-gradient(0deg,#101727cc,transparent),url("' +
-                      api.assetUrl(value(location, 'coverAsset')) +
-                      '")',
-                  }
-                : undefined
-            }
-          >
-            {speaker && value(speaker, 'avatarAsset') && (
-              <img
-                className="vn-portrait"
-                src={api.assetUrl(value(speaker, 'avatarAsset'))}
-                alt={speaker.title}
-              />
-            )}
-            <section className="vn-dialog" key={current?.id}>
-              <small>
-                {location?.title} · {current ? safeIndex + 1 : 0} /{' '}
-                {lines.length}
-              </small>
-              <h2>{current?.speakerName ?? '旁白'}</h2>
-              <i>{current?.mood}</i>
-              <p>{current?.text || '暂无台词'}</p>
-              <progress
-                value={current ? safeIndex + 1 : 0}
-                max={lines.length || 1}
-              />
-              <div className="visual-tools">
-                <button disabled={!safeIndex} onClick={() => next(-1)}>
-                  ← 上一句
-                </button>
-                <button
-                  disabled={safeIndex + 1 >= lines.length}
-                  onClick={() => next(1)}
-                >
-                  下一句 →
-                </button>
-                <button onClick={() => setMode('编写')}>退出 (Esc)</button>
-              </div>
-            </section>
-          </div>
+          <Playtest
+            lines={lines}
+            byId={byId}
+            location={location}
+            exit={() => setMode('编写')}
+          />
         )}
       </section>
     </>

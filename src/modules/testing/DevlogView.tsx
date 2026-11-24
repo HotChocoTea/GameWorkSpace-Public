@@ -1,3 +1,4 @@
+import { MentionEditor } from '../../components/MentionEditor'
 import { useEffect, useRef, useState } from 'react'
 import { Plus, Trash2, Upload } from 'lucide-react'
 import { api } from '../../api/client'
@@ -16,7 +17,7 @@ export function DevlogEditor({
   entity: Entity
   onDelete: () => void
 }) {
-  const { notify } = useWorkspace()
+  const { notify, trash } = useWorkspace()
   const [row, set] = useState(entity),
     [mode, setMode] = useState('分屏'),
     [status, setStatus] = useState('已自动保存')
@@ -80,7 +81,7 @@ export function DevlogEditor({
     deleting.current = true
     try {
       await flush()
-      await api.deleteEntity(row.id)
+      await trash(row.id)
       onDelete()
     } catch (e) {
       notify(String(e))
@@ -173,11 +174,11 @@ export function DevlogEditor({
       </div>
       <div className={'editor-panes ' + (mode === '分屏' ? 'split-mode' : '')}>
         {mode !== '预览' && (
-          <textarea
+          <MentionEditor
             aria-label="Markdown 正文"
             placeholder="记录本次迭代…"
             value={row.body}
-            onChange={(e) => update({ ...row, body: e.target.value })}
+            onValue={(body) => update({ ...row, body })}
           />
         )}{' '}
         {mode !== '编辑' && <Markdown body={row.body} />}

@@ -40,12 +40,14 @@ const formats = [
   },
 ]
 export function ExportModal({
+  sync,
   projects,
   initial,
   onClose,
   done,
 }: {
   projects: Project[]
+  sync: (id: string) => void
   initial?: string
   onClose: () => void
   done: Done
@@ -75,6 +77,7 @@ export function ExportModal({
         downloadFile(
           JSON.stringify({
             format: 'gameworkspace-backup',
+            moduleCatalogVersion: 3,
             version: 1,
             exportedAt: new Date().toISOString(),
             snapshot: s,
@@ -114,6 +117,13 @@ export function ExportModal({
             ))}
           </select>
         </label>
+        <button
+          className="secondary"
+          disabled={!id || !!busy}
+          onClick={() => sync(id)}
+        >
+          同步到游戏引擎
+        </button>
         {formats.map((f) => (
           <button
             key={f.ext}
@@ -170,7 +180,7 @@ export function RestoreModal({
           <input
             type="file"
             disabled={busy}
-            accept=".gws.json,.mino.json,.json"
+            accept=".gws.json,.json"
             onChange={(e) => {
               const f = e.target.files?.[0]
               if (f) void restore(f)

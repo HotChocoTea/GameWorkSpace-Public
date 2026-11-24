@@ -1,3 +1,4 @@
+import { MentionEditor } from '../../components/MentionEditor'
 import { useRef, useState } from 'react'
 import { Markdown } from '../../components/Markdown'
 import { newEntity } from '../../state/catalog'
@@ -19,9 +20,7 @@ export function WorldPreview({
       body={body}
       toggleTask={toggleTask}
       wiki={(title, key) => {
-        const target = entities.find(
-          (e) => e.entityType === 'lore' && e.title.trim() === title,
-        )
+        const target = entities.find((e) => e.title.trim() === title)
         return (
           <button
             key={key}
@@ -135,11 +134,11 @@ export function DocumentBody({ editor }: { editor: Editor }) {
       </div>
       <div className={mode === '分屏' ? 'world-md split-md' : 'world-md'}>
         {mode !== '预览' && (
-          <textarea
+          <MentionEditor
             aria-label="Markdown 正文"
             ref={area}
             value={editor.e.body}
-            onChange={(ev) => editor.edit({ body: ev.target.value })}
+            onValue={(body) => editor.edit({ body })}
           />
         )}
         {mode !== '编辑' && (

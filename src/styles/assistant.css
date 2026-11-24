@@ -64,6 +64,30 @@
 .proposal header {
   justify-content: flex-start;
 }
+.proposal-mod,
+.ai-scope-bar > span {
+  max-width: 100%;
+  padding: 3px 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--chip);
+  color: var(--side-ink);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.proposal-snapshot {
+  margin-top: 8px;
+  padding-inline-start: 8px;
+  border-inline-start: 2px solid var(--line-strong);
+  font-size: 12px;
+}
+.proposal-summary-list {
+  margin: 3px 0 0;
+  padding-inline-start: 1.2em;
+  list-style: disc;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
 .proposal footer {
   border-top: 1px solid var(--line);
   padding-top: 8px;
@@ -106,6 +130,19 @@
   border-top: 1px solid var(--line);
   padding-top: 10px;
 }
+.ai-scope-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+}
+.ai-scope-bar button {
+  padding: 3px 4px;
+  color: var(--ink);
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 .ai-compose textarea,
 .ai-settings textarea,
 .import-split textarea {
@@ -127,6 +164,19 @@
 .ai-settings label:has(input[type='checkbox']) {
   display: flex;
   align-items: center;
+}
+.ai-model-picker {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+.ai-model-picker select,
+.ai-model-picker input {
+  width: 100%;
+  min-width: 0;
+}
+.ai-settings .ai-form-pair {
+  align-items: start;
 }
 .ai-form-pair,
 .import-split {

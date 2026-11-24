@@ -1,49 +1,51 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+mod asset_protocol;
 mod commands;
 mod live_sync;
+mod save_dialog;
 use commands::*;
-use mino_core::{seeder::seed_sample_project_if_empty, Database};
+use gws_core::{seeder::seed_sample_project_if_empty, Database};
 use std::sync::Arc;
 use tauri::{http::Response, Emitter, Manager};
 
 fn main() {
     tauri::Builder::default()
         .setup(|app| {
-            let data_dir = mino_core::resolve_default_data_dir()?;
+            let mut args = std::env::args_os().skip(1);
+            let cli = if args.any(|arg| arg == "--data-dir") {
+                Some(std::path::PathBuf::from(
+                    args.next().ok_or("--data-dir requires a path")?,
+                ))
+            } else {
+                None
+            };
+            let data_dir = gws_core::resolve_data_dir(cli.as_deref())?;
             let db = Arc::new(Database::open(&data_dir)?);
             seed_sample_project_if_empty(&db)?;
             db.purge_expired()?;
+            let snapshot_db = db.clone();
+            tauri::async_runtime::spawn_blocking(move || {
+                if let Err(error) = gws_core::snapshots::daily_snapshot(&snapshot_db) {
+                    eprintln!("每日快照失败：{error}");
+                }
+            });
             let seen = db.last_change()?;
             app.manage(McpService::default());
             app.manage(db.clone());
             let handle = app.handle().clone();
             tauri::async_runtime::spawn(live_sync::watch(db, seen, move |payload| {
-                handle.emit("mino://db-changed", payload).is_ok()
+                handle.emit("gws://db-changed", payload).is_ok()
             }));
             Ok(())
         })
-        .register_uri_scheme_protocol("mino-asset", |ctx, request| {
+        .register_uri_scheme_protocol("gws-asset", |ctx, request| {
             let db = ctx.app_handle().state::<Arc<Database>>();
             let name = request.uri().path().trim_start_matches('/');
-            let mime = match name.rsplit('.').next().unwrap_or("") {
-                "png" => "image/png",
-                "jpg" | "jpeg" => "image/jpeg",
-                "gif" => "image/gif",
-                "webp" => "image/webp",
-                "avif" => "image/avif",
-                "bmp" => "image/bmp",
-                _ => "application/octet-stream",
-            };
             match db
                 .resolve_asset_path(name)
-                .and_then(|p| Ok(std::fs::read(p)?))
+                .and_then(|path| Ok(asset_protocol::serve(&path, name, &request)?))
             {
-                Ok(bytes) => Response::builder()
-                    .header("Content-Type", mime)
-                    .header("X-Content-Type-Options", "nosniff")
-                    .header("Cache-Control", "public,max-age=31536000,immutable")
-                    .body(bytes)
-                    .expect("static response headers"),
+                Ok(response) => response,
                 Err(_) => Response::builder()
                     .status(404)
                     .body(Vec::new())
@@ -51,6 +53,19 @@ fn main() {
             }
         })
         .invoke_handler(tauri::generate_handler![
+            active_data_dir,
+            evaluate_balance_curve,
+            simulate_drop_table,
+            extract_project_localization,
+            ai_translate_localization,
+            save_locale_translation,
+            migrate_data_dir,
+            open_data_dir_in_explorer,
+            create_snapshot,
+            list_snapshots,
+            restore_snapshot,
+            analyze_entity_impact,
+            sync_project_to_engine,
             get_mcp_status,
             start_mcp_http,
             stop_mcp_http,
@@ -60,6 +75,7 @@ fn main() {
             set_api_key,
             delete_api_key,
             test_ai_connection,
+            fetch_ai_models,
             ai_chat_send,
             ai_assist_action,
             list_ai_messages,
@@ -109,6 +125,8 @@ fn main() {
             delete_activity,
             list_maps,
             save_map,
+            save_export_file,
+            export_map_tiled_file,
             delete_map,
             list_recipes,
             save_recipe,

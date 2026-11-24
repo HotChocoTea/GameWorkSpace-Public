@@ -46,7 +46,7 @@ export function EntityLinkPanel({ entity }: { entity: Entity }) {
               </span>
               <button onClick={() => openEntity(other)}>{other.title}</button>
               <small>{l.relationLabel}</small>
-              {!back && (
+              {!back && l.linkKind !== 'mention' && (
                 <button
                   title="移除关联"
                   onClick={() =>

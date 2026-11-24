@@ -3,6 +3,7 @@ import { Plus, Trash2 } from 'lucide-react'
 import { EntityLinkPanel } from '../../components/EntityLinkPanel'
 import { RecycleBin } from '../../components/Records'
 import { Empty, IconButton, Menu } from '../../components/ui'
+import { ImpactButton } from '../../components/ImpactModal'
 import { useWorkspace } from '../../state/workspace'
 import type { Entity } from '../../types'
 import {
@@ -96,6 +97,7 @@ function Page({
           empty="根目录"
         />
         <div className="world-stamp">
+          <ImpactButton id={ed.e.id} />
           <SaveStatus editor={ed} />
           <small>
             更新于 {new Date(entity.updatedAt).toLocaleString('zh-CN')}

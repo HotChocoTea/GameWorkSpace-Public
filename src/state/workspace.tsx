@@ -20,6 +20,7 @@ export interface Workspace {
     restore?: string[],
     trash?: string[],
   ) => Promise<void>
+  impact: (id: string) => Promise<boolean>
   trash: (id: string) => Promise<void>
   links: EntityLink[]
   maps: MapRecord[]
@@ -30,6 +31,8 @@ export interface Workspace {
   inspect: (id: string) => void
   navigate: (mod: string, selected?: string) => void
   notify: (message: string) => void
+  refresh: () => void
+  aiSettings: () => void
   assistant: (prompt: string, focusedId?: string) => void
   smartImport: (mode: 'design' | 'bugs') => void
 }

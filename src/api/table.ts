@@ -1,3 +1,18 @@
+import { downloadFile } from './ai'
+
+export function downloadCsv(
+  name: string,
+  headers: string[],
+  rows: (string | number | null)[][],
+) {
+  const encode = (v: string | number | null) =>
+    '"' + String(v ?? '').replaceAll('"', '""') + '"'
+  const csv = [headers, ...rows]
+    .map((row) => row.map(encode).join(','))
+    .join('\r\n')
+  downloadFile('\uFEFF' + csv, name + '.csv', 'text/csv;charset=utf-8')
+}
+
 export interface ParsedTable {
   headers: string[]
   rows: string[][]

@@ -16,6 +16,7 @@ export function AiSettings() {
   const [system, setSystem] = useState(defaultSystem),
     [status, setStatus] = useState<KeyStatus[]>([]),
     [feedback, setFeedback] = useState(''),
+    [customModel, setCustomModel] = useState(false),
     [busy, setBusy] = useState(false)
   useEffect(() => {
     let live = true
@@ -37,6 +38,10 @@ export function AiSettings() {
   }, [])
   const config = configs.find((p) => p.id === id),
     saved = status.find((p) => p.providerId === id)
+  const availableModels = [
+    ...new Set([...(config?.models ?? []), ...(config?.model ? [config.model] : [])]),
+  ]
+  const manual = customModel || !config?.models.length || !config.model
   function patch(values: Partial<Provider>) {
     setConfigs((all) => all.map((p) => (p.id === id ? { ...p, ...values } : p)))
   }
@@ -61,6 +66,7 @@ export function AiSettings() {
               value={id}
               onChange={(e) => {
                 setId(e.target.value)
+                setCustomModel(false)
                 setKey('')
                 setFeedback('')
               }}
@@ -81,19 +87,35 @@ export function AiSettings() {
             />
           </label>
           <div className="ai-form-pair">
-            <label>
-              模型
-              <input
-                list="ai-models"
-                value={config.model}
-                onChange={(e) => patch({ model: e.target.value })}
-              />
-              <datalist id="ai-models">
-                {config.models.map((m) => (
-                  <option key={m} value={m} />
-                ))}
-              </datalist>
-            </label>
+            <div className="ai-model-picker">
+              <label>
+                模型
+                <select
+                  value={manual ? '__custom__' : config.model}
+                  onChange={(e) => {
+                    const custom = e.target.value === '__custom__'
+                    setCustomModel(custom)
+                    patch({ model: custom ? '' : e.target.value })
+                  }}
+                >
+                  {availableModels.map((model) => (
+                    <option key={model} value={model}>
+                      {model}
+                    </option>
+                  ))}
+                  <option value="__custom__">自定义模型 ID…</option>
+                </select>
+              </label>
+              {manual && (
+                <input
+                  aria-label="自定义模型 ID"
+                  type="text"
+                  placeholder="例如 gpt-5.4 / claude-sonnet-4-6"
+                  value={config.model}
+                  onChange={(e) => patch({ model: e.target.value })}
+                />
+              )}
+            </div>
             <label>
               推理深度
               <select
@@ -185,6 +207,28 @@ export function AiSettings() {
               }
             >
               测试连接
+            </button>
+            <button
+              className="secondary"
+              onClick={() =>
+                void act(async () => {
+                  if (key.trim()) return '请先点击「保存密钥」，再获取模型列表'
+                  const models = await native<string[]>('fetch_ai_models', {
+                    config,
+                  })
+                  const nextConfigs = configs.map((p) =>
+                    p.id === id
+                      ? { ...p, models, model: p.model.trim() || models[0] }
+                      : p,
+                  )
+                  await saveProvider(nextConfigs, id, system)
+                  setConfigs(nextConfigs)
+                  setCustomModel(false)
+                  return `已获取 ${models.length} 个模型，有时间戳的模型已按从新到旧排列`
+                })
+              }
+            >
+              获取最新模型
             </button>
           </div>
           <label>

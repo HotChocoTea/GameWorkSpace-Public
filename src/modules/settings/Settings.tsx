@@ -22,6 +22,7 @@ import {
   type Preferences,
   type Theme,
 } from '../../state/catalog'
+import { DataSettings } from './DataSettings'
 import { Modal } from '../../components/ui'
 import type { ProjectStats } from '../../types'
 
@@ -235,6 +236,7 @@ export function Settings({
           )}
           {tab === '数据与备份' && (
             <>
+              <DataSettings />
               <div className="setting-row">
                 本地项目<b>{stats.length}</b>
               </div>

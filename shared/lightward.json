@@ -35,7 +35,10 @@
       "graph",
       "mapmaker",
       "testing",
-      "devlog"
+      "devlog",
+      "assets_pipeline",
+      "balance",
+      "localization"
     ],
     "currentPhaseId": "phase-2",
     "createdAt": "@day:-24T09:00:00Z",
@@ -2734,8 +2737,21 @@
             "id": "scene-1-line-2",
             "speakerId": "character-2",
             "speakerName": "沈烛",
-            "text": "只要笛还响，就有人回来。",
-            "mood": "隔雾应声"
+            "text": "只要笛还响，就有人回来。 老秦在北堤等你，要我带路吗？",
+            "mood": "隔雾应声",
+            "choices": [
+              {
+                "id": "trust",
+                "text": "相信老秦，跟着灯走。",
+                "setVar": "信任老秦 = true",
+                "nextLineId": "scene-1-line-3"
+              },
+              {
+                "id": "alone",
+                "text": "我先去码头打听。",
+                "nextLineId": "scene-1-line-dock"
+              }
+            ]
           },
           {
             "id": "scene-1-line-3",
@@ -2749,7 +2765,15 @@
             "speakerId": "narrator",
             "speakerName": "旁白",
             "text": "栈桥尽头亮起一点橘光，陆汐沿着湿漉漉的缆绳走过去。",
-            "mood": ""
+            "mood": "",
+            "nextLineId": "__END__"
+          },
+          {
+            "id": "scene-1-line-dock",
+            "speakerId": "narrator",
+            "speakerName": "旁白",
+            "mood": "",
+            "text": "陆汐把罗盘收入怀中，转身走向还亮着灯的船坞。"
           }
         ]
       },
@@ -3136,6 +3160,336 @@
         "height": 245
       },
       "sortOrder": 1,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "asset-item-1",
+      "projectId": "lightward",
+      "entityType": "asset_item",
+      "title": "白岬灯塔 3D 模型 · 灰盒占位",
+      "subtitle": "",
+      "summary": "镜室与塔梯已按关卡尺度搭好，等待替换外墙和灯罩。",
+      "status": "灰盒占位",
+      "tags": [],
+      "body": "",
+      "data": {
+        "category": "3D模型",
+        "stage": "灰盒占位",
+        "linkedEntityIds": [
+          "location-3"
+        ]
+      },
+      "sortOrder": 1,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "asset-item-2",
+      "projectId": "lightward",
+      "entityType": "asset_item",
+      "title": "潮汐海浪循环 BGM · 灰盒占位",
+      "subtitle": "",
+      "summary": "退潮时保留低频浪声，换潮段在两拍内交叉淡入。",
+      "status": "灰盒占位",
+      "tags": [],
+      "body": "",
+      "data": {
+        "category": "BGM",
+        "stage": "灰盒占位",
+        "linkedEntityIds": [
+          "location-2"
+        ]
+      },
+      "sortOrder": 2,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "asset-item-3",
+      "projectId": "lightward",
+      "entityType": "asset_item",
+      "title": "林汐立绘 · 已实装",
+      "subtitle": "",
+      "summary": "港口来信中的人物立绘，已接入场景预览。",
+      "status": "已实装",
+      "tags": [],
+      "body": "",
+      "data": {
+        "category": "立绘",
+        "stage": "已实装",
+        "linkedEntityIds": [
+          "scene-1"
+        ],
+        "asset": "75b4220f8959969f0a4315e5984b6959b272b492dec2e20f5aa471f9a7244a48.webp"
+      },
+      "sortOrder": 3,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "asset-item-4",
+      "projectId": "lightward",
+      "entityType": "asset_item",
+      "title": "雾灯点亮音效 · 制作中",
+      "subtitle": "",
+      "summary": "旋钮咔哒声后接灯芯燃起的短音，首轮混音待复核。",
+      "status": "制作中",
+      "tags": [],
+      "body": "",
+      "data": {
+        "category": "SFX",
+        "stage": "制作中",
+        "linkedEntityIds": [
+          "item-7"
+        ]
+      },
+      "sortOrder": 4,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "balance-sheet-1",
+      "projectId": "lightward",
+      "entityType": "balance_sheet",
+      "title": "潮汐航行数值表",
+      "subtitle": "",
+      "summary": "估算雾区航行消耗、收益与打捞产出。",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "minLevel": 1,
+        "maxLevel": 50,
+        "vars": {
+          "base": 6,
+          "rate": 1.25
+        },
+        "formulas": [
+          {
+            "id": "oil",
+            "name": "灯油消耗",
+            "color": "#b66939",
+            "expression": "base * level ^ rate"
+          },
+          {
+            "id": "income",
+            "name": "航程收益",
+            "color": "#397d89",
+            "expression": "60 + level * 22"
+          },
+          {
+            "id": "fog",
+            "name": "雾压强度",
+            "color": "#8770a4",
+            "expression": "15 + floor(level * 3.5)"
+          }
+        ],
+        "overrides": {
+          "oil": {
+            "5": 48
+          }
+        },
+        "entries": [
+          {
+            "id": "drop-0",
+            "itemId": "item-1",
+            "name": "雾盐",
+            "unitValue": 3,
+            "minQty": 1,
+            "maxQty": 4,
+            "weight": 54
+          },
+          {
+            "id": "drop-1",
+            "itemId": "item-2",
+            "name": "青铜扣",
+            "unitValue": 6,
+            "minQty": 1,
+            "maxQty": 2,
+            "weight": 28
+          },
+          {
+            "id": "drop-2",
+            "itemId": "item-3",
+            "name": "透光砂",
+            "unitValue": 8,
+            "minQty": 1,
+            "maxQty": 2,
+            "weight": 15
+          },
+          {
+            "id": "drop-3",
+            "itemId": "item-5",
+            "name": "折光镜",
+            "unitValue": 45,
+            "minQty": 1,
+            "maxQty": 1,
+            "weight": 3
+          }
+        ]
+      },
+      "sortOrder": 1,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "locale-1",
+      "projectId": "lightward",
+      "entityType": "locale_entry",
+      "title": "item.item-1.title",
+      "subtitle": "",
+      "summary": "",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "key": "item.item-1.title",
+        "source": "雾盐",
+        "category": "item",
+        "sourceId": "item-1",
+        "sourcePath": "title",
+        "speakerId": "",
+        "translations": {
+          "en-US": "Mist Salt",
+          "ja-JP": "霧塩"
+        }
+      },
+      "sortOrder": 1,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "locale-2",
+      "projectId": "lightward",
+      "entityType": "locale_entry",
+      "title": "location.location-2.title",
+      "subtitle": "",
+      "summary": "",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "key": "location.location-2.title",
+        "source": "雾港",
+        "category": "location",
+        "sourceId": "location-2",
+        "sourcePath": "title",
+        "speakerId": "",
+        "translations": {
+          "en-US": "Mist Harbor"
+        }
+      },
+      "sortOrder": 2,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "locale-3",
+      "projectId": "lightward",
+      "entityType": "locale_entry",
+      "title": "quest.quest-1.title",
+      "subtitle": "",
+      "summary": "",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "key": "quest.quest-1.title",
+        "source": "重燃白岬",
+        "category": "quest",
+        "sourceId": "quest-1",
+        "sourcePath": "title",
+        "speakerId": "",
+        "translations": {
+          "ja-JP": "白岬に再び灯を"
+        }
+      },
+      "sortOrder": 3,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "locale-4",
+      "projectId": "lightward",
+      "entityType": "locale_entry",
+      "title": "collectible.collectible-1.title",
+      "subtitle": "",
+      "summary": "",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "key": "collectible.collectible-1.title",
+        "source": "北堤信笺",
+        "category": "collectible",
+        "sourceId": "collectible-1",
+        "sourcePath": "title",
+        "speakerId": "",
+        "translations": {}
+      },
+      "sortOrder": 4,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "locale-5",
+      "projectId": "lightward",
+      "entityType": "locale_entry",
+      "title": "scene.scene-1.line.scene-1-line-1",
+      "subtitle": "",
+      "summary": "",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "key": "scene.scene-1.line.scene-1-line-1",
+        "source": "雾里也有人等船吗？",
+        "category": "scene",
+        "sourceId": "scene-1",
+        "sourcePath": "line.scene-1-line-1",
+        "speakerId": "character-1",
+        "translations": {
+          "en-US": "Does anyone wait for ships in this fog?"
+        }
+      },
+      "sortOrder": 5,
+      "deletedAt": null,
+      "createdAt": "@day:-10T09:00:00Z",
+      "updatedAt": "@day:-1T09:00:00Z"
+    },
+    {
+      "id": "locale-6",
+      "projectId": "lightward",
+      "entityType": "locale_entry",
+      "title": "scene.scene-1.line.scene-1-line-2.choice.trust",
+      "subtitle": "",
+      "summary": "",
+      "status": "",
+      "tags": [],
+      "body": "",
+      "data": {
+        "key": "scene.scene-1.line.scene-1-line-2.choice.trust",
+        "source": "相信老秦，跟着灯走。",
+        "category": "scene",
+        "sourceId": "scene-1",
+        "sourcePath": "line.scene-1-line-2.choice.trust",
+        "speakerId": "",
+        "translations": {
+          "ja-JP": "秦さんを信じて、灯りについていく。"
+        }
+      },
+      "sortOrder": 6,
       "deletedAt": null,
       "createdAt": "@day:-10T09:00:00Z",
       "updatedAt": "@day:-1T09:00:00Z"

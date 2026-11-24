@@ -1,7 +1,7 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "GameWorkSpace",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "identifier": "com.gameworkspace.app",
   "build": {
     "beforeDevCommand": "npm run dev",
@@ -21,7 +21,7 @@
       }
     ],
     "security": {
-      "csp": "default-src 'self'; connect-src 'self' ipc: http://ipc.localhost; img-src 'self' mino-asset: http://mino-asset.localhost https: blob: data:; style-src 'self' 'unsafe-inline'"
+      "csp": "default-src 'self'; connect-src 'self' ipc: http://ipc.localhost; img-src 'self' gws-asset: http://gws-asset.localhost https://gws-asset.localhost https: blob: data:; media-src 'self' gws-asset: http://gws-asset.localhost https://gws-asset.localhost blob: data:; style-src 'self' 'unsafe-inline'"
     }
   },
   "bundle": {

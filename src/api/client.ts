@@ -34,6 +34,17 @@ function call<T>(
 }
 async function saveAsset(file: File): Promise<AssetInfo> {
   const ext: Record<string, string> = {
+    'audio/mpeg': 'mp3',
+    'audio/wav': 'wav',
+    'audio/x-wav': 'wav',
+    'audio/vnd.wave': 'wav',
+    'audio/ogg': 'ogg',
+    'audio/flac': 'flac',
+    'audio/x-flac': 'flac',
+    'audio/mp4': 'm4a',
+    'audio/x-m4a': 'm4a',
+    'audio/webm': 'webm',
+    'video/webm': 'webm',
     'image/jpeg': 'jpg',
     'image/png': 'png',
     'image/webp': 'webp',
@@ -41,11 +52,16 @@ async function saveAsset(file: File): Promise<AssetInfo> {
     'image/avif': 'avif',
     'image/bmp': 'bmp',
   }
-  const extension = ext[file.type]
-  if (!extension) throw Error('请选择 PNG、JPEG、WebP、GIF、AVIF 或 BMP 图片')
+  const suffix = file.name.split('.').pop()?.toLowerCase() ?? ''
+  const extension =
+    ext[file.type] ??
+    (['mp3', 'wav', 'ogg', 'flac', 'm4a', 'webm'].includes(suffix)
+      ? suffix
+      : '')
+  if (!extension) throw Error('请选择受支持的图片或音频文件')
   if (!desktop) return (await preview()).mock.upload(file, extension)
   return invoke('save_asset', await file.arrayBuffer(), {
-    headers: { 'x-mino-extension': extension },
+    headers: { 'x-gws-extension': extension },
   })
 }
 export const api = {
@@ -200,13 +216,25 @@ export const api = {
     call<void>('delete_recipe', { id }, (module) =>
       module.mockRecipes.remove(id),
     ),
-  subscribe: (fn: (change?: {seq: number; externalMcpCount: number; latestSummary: string}) => void) =>
+  subscribe: (
+    fn: (change?: {
+      seq: number
+      externalMcpCount: number
+      latestSummary: string
+      syncErrors?: string[]
+    }) => void,
+  ) =>
     desktop
-      ? listen<{seq: number; externalMcpCount: number; latestSummary: string}>('mino://db-changed', ({payload}) => fn(payload))
+      ? listen<{
+          seq: number
+          externalMcpCount: number
+          latestSummary: string
+          syncErrors?: string[]
+        }>('gws://db-changed', ({ payload }) => fn(payload))
       : preview().then((m) => m.mock.subscribe(fn)),
   assetUrl: (name: string) =>
     desktop
-      ? convertFileSrc(name, 'mino-asset')
+      ? convertFileSrc(name, 'gws-asset')
       : (previewModule?.mock.assetUrl(name) ?? ''),
 }
 export const coverUrl = (p: Project) =>

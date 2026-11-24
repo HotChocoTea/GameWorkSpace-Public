@@ -1,3 +1,5 @@
+import { useContext } from 'react'
+import { WorkspaceContext } from '../state/workspace'
 import type { ReactNode } from 'react'
 import { api } from '../api/client'
 
@@ -55,6 +57,23 @@ export function Markdown({
   wiki?: WikiRenderer
   toggleTask?: (line: number) => void
 }) {
+  const workspace = useContext(WorkspaceContext)
+  wiki ??= (title, key) => {
+    const target = workspace?.entities.find((e) => e.title.trim() === title)
+    return target ? (
+      <button
+        key={key}
+        className="wiki-link"
+        onClick={() => workspace?.openEntity(target)}
+      >
+        {title}
+      </button>
+    ) : (
+      <span className="wiki-link missing" key={key}>
+        {title}
+      </span>
+    )
+  }
   const lines = body.replace(/\r\n/g, '\n').split('\n'),
     nodes: ReactNode[] = []
   for (let i = 0; i < lines.length; i++) {

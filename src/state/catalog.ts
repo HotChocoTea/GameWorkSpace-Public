@@ -1,4 +1,7 @@
 import {
+  FolderKanban,
+  SlidersHorizontal,
+  Languages,
   LayoutDashboard,
   Columns3,
   Milestone,
@@ -46,12 +49,15 @@ export const groups = [
       entry('tasks', '任务', Columns3, 'task'),
       entry('roadmap', '路线图', Milestone, 'phase', 'milestone'),
       entry('calendar', '日历', CalendarDays, 'calendar_event'),
+      entry('assets_pipeline', '资产管线', FolderKanban, 'asset_item'),
       entry('time', '工时', Timer),
     ],
   },
   {
     name: '文档与世界',
     items: [
+      entry('balance', '数值平衡', SlidersHorizontal, 'balance_sheet'),
+      entry('localization', '本地化', Languages, 'locale_entry'),
       entry('docs', '文档', BookOpen, 'doc'),
       entry('lore', '设定集', LibraryBig, 'lore'),
       entry('art', '概念图', Images, 'concept_art'),

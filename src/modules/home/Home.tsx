@@ -90,7 +90,7 @@ export default function Home({
           </i>
           <span>
             <strong>导入备份</strong>
-            <small>从导出的 .gws.json / .mino.json 备份文件恢复项目</small>
+            <small>从导出的 .gws.json 备份文件恢复项目</small>
           </span>
           <ArrowRight size={16} />
         </button>

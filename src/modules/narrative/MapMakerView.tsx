@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { api } from '../../api/client'
+import { native, saveExportFile } from '../../api/ai'
+import { api, desktop } from '../../api/client'
 import {
   clamp,
   dotGrid,
@@ -64,12 +65,7 @@ function write(map: TileMap) {
 }
 function useMapDraft(record: MapRecord) {
   const { notify } = useWorkspace(),
-    [draft, setDraft] = useState(() => {
-      const local = pending.get(record.id) ?? saved.get(record.id)
-      return local && local.updatedAt >= record.updatedAt
-        ? local
-        : readMap(record)
-    })
+    [draft, setDraft] = useState(() => pending.get(record.id) ?? readMap(record))
   const current = useRef(draft),
     timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined),
     [error, setError] = useState('')
@@ -88,16 +84,40 @@ function useMapDraft(record: MapRecord) {
       })
   }
   useEffect(() => {
-    const last = saved.get(record.id)
-    if (last && last.updatedAt <= record.updatedAt) saved.delete(record.id)
-    if (
-      !pending.has(record.id) &&
-      record.updatedAt > current.current.updatedAt
-    ) {
-      current.current = readMap(record)
+    function sync(next: MapRecord) {
+      if (next.updatedAt === current.current.updatedAt) return
+      current.current = readMap(next)
       setDraft(current.current)
     }
-  }, [record])
+    const last = saved.get(record.id)
+    if (!last || last.updatedAt <= record.updatedAt) {
+      saved.delete(record.id)
+      if (!pending.has(record.id)) sync(record)
+      return
+    }
+    if (pending.has(record.id)) return
+
+    // The workspace read may predate our save, or a rollback may have restored
+    // an older version before the editor saw that save. Read after the commit.
+    let live = true
+    api
+      .listMaps(record.projectId)
+      .then((maps) => {
+        if (!live || pending.has(record.id) || saved.get(record.id) !== last)
+          return
+        const persisted = maps.find((map) => map.id === record.id)
+        if (!persisted || persisted.updatedAt < last.updatedAt)
+          saved.delete(record.id)
+        if (!persisted) return
+        sync(persisted)
+      })
+      .catch((e) => {
+        if (live) notify(String(e))
+      })
+    return () => {
+      live = false
+    }
+  }, [record, notify])
   useEffect(() => {
     window.addEventListener('pagehide', flush)
     return () => {
@@ -140,6 +160,7 @@ function MapEditor({
     [size, setSize] = useState(1),
     [grid, setGrid] = useState(true),
     [labels, setLabels] = useState(true),
+    [exporting, setExporting] = useState(false),
     [palette, setPalette] = useState('图块'),
     [tile, setTile] = useState(1)
   const [cat, setCat] = useState('自然'),
@@ -389,26 +410,65 @@ function MapEditor({
       return true
     }
   })
-  function exportPng() {
+  async function runExport(format: string, save: () => Promise<string | null>) {
+    if (exporting) return
+    setExporting(true)
+    try {
+      const path = await save()
+      if (path) w.notify('已导出 ' + format + '：' + path)
+    } catch (e) {
+      w.notify(format + ' 导出失败：' + String(e))
+    } finally {
+      setExporting(false)
+    }
+  }
+  async function exportPng() {
     const image = document.createElement('canvas'),
       rect = extent()
     image.width = rect.width
     image.height = rect.height
     const ctx = image.getContext('2d')
-    if (!ctx) return
+    if (!ctx) throw Error('无法创建绘图画布')
     drawMap(ctx, m, rect, false, labels)
-    image.toBlob((blob) => {
-      if (!blob) {
-        w.notify('PNG 导出失败')
-        return
-      }
-      const url = URL.createObjectURL(blob),
-        a = document.createElement('a')
-      a.download = m.name + '.png'
-      a.href = url
-      a.click()
-      setTimeout(() => URL.revokeObjectURL(url), 1000)
+    const blob = await new Promise<Blob | null>((resolve) => {
+      image.toBlob(resolve, 'image/png')
     })
+    if (!blob) {
+      w.notify('PNG 导出失败')
+      return null
+    }
+    return saveExportFile(blob, m.name + '.png', 'PNG 图像', 'png', 'image/png')
+  }
+  async function exportJson() {
+    const payload = {
+      format: 'gameworkspace-map',
+      version: 1,
+      id: m.id,
+      projectId: m.projectId,
+      name: m.name,
+      width: m.width,
+      height: m.height,
+      tileSize: m.tileSize,
+      terrains: terrains.map(([name, color], i) => ({ id: i + 1, name, color })),
+      customTiles: m.customTiles,
+      layers: m.layers,
+      pins: m.pins,
+      exportedAt: new Date().toISOString(),
+    }
+    return saveExportFile(
+      JSON.stringify(payload, null, 2),
+      m.name + '.json',
+      'JSON 地图',
+      'json',
+      'application/json;charset=utf-8',
+    )
+  }
+  async function exportTiled() {
+    if (!desktop) {
+      w.notify('请在 GameWorkSpace 桌面端导出 Tiled (.tmj) 地图')
+      return null
+    }
+    return native<string | null>('export_map_tiled_file', { record: m })
   }
   function reorder(delta: number) {
     const next = index + delta
@@ -705,7 +765,20 @@ function MapEditor({
           />{' '}
           显示图钉文字
         </label>
-        <button onClick={exportPng}>导出 PNG</button>
+        <div className="map-export-actions" aria-busy={exporting}>
+          <button disabled={exporting} onClick={() => void runExport('PNG', exportPng)}>
+            导出 PNG
+          </button>
+          <button disabled={exporting} onClick={() => void runExport('JSON', exportJson)}>
+            导出 JSON
+          </button>
+          <button
+            disabled={exporting}
+            onClick={() => void runExport('Tiled 地图（含 .bmp 图集）', exportTiled)}
+          >
+            导出 Tiled (.tmj)
+          </button>
+        </div>
       </aside>
       {custom && (
         <Modal title="自定义图块" onClose={() => setCustom(false)}>
@@ -745,7 +818,7 @@ function MapEditor({
 }
 export default function MapMakerView() {
   const w = useWorkspace(),
-    [selected, select] = useState(''),
+    [selected, select] = useState(w.selected ?? ''),
     [modal, setModal] = useState(''),
     [created, setCreated] = useState<MapRecord>()
   const maps =
@@ -753,6 +826,9 @@ export default function MapMakerView() {
         ? [...w.maps, created]
         : w.maps,
     m = maps.find((m) => m.id === selected) ?? maps[0]
+  useEffect(() => {
+    if (w.selected) select(w.selected)
+  }, [w.selected])
   useEffect(() => {
     if (created && w.maps.some((m) => m.id === created.id))
       setCreated(undefined)
